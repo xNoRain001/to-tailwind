@@ -103,7 +103,6 @@ const filterNodes = (sourceNodes, selector) => {
   for (let i = 0, l = selectorNodes.length; i < l; i++) {
     const { type, name, value } = selectorNodes[i]
     nodes = strategies[type](nodes, name, value) || []
-    // console.log(nodes)
 
     if (!nodes.length) {
       break

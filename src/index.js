@@ -2,7 +2,11 @@ const HTML = require('./html-parser')
 const spec = require('selector-specificity')
 const { readFile } = require('fs').promises
 
-const { filterNodes, styleToTailwind } = require('./utils')
+const { 
+  filterNodes, 
+  styleToTailwind, 
+  classMetadataToTailwindExp 
+} = require('./utils')
 
 const cssStyleRuleRegexp = /}?\s*([\s\S]*?)\s*{\s*([\s\S]*?)\s*}/g
 
@@ -20,7 +24,7 @@ const strategies = {
 ;(async () => {
   const css = await readFile('../test/index.css', 'utf-8')
   const html = await readFile('../test/index.html', 'utf-8')
-  const sourceNodes = HTML.parse(html).nodes
+  const { ast, nodes: sourceNodes } = HTML.parse(html)
 
   // TODO: /* foo */
   css.replace(cssStyleRuleRegexp, (_, selector, cssText) => {
@@ -58,10 +62,17 @@ const strategies = {
         }
       }
     }
-
-    console.log(nodes)
   })
 
-  // const res = sourceNodes.filter(node => node.tagName === 'input')
-  // console.log(res[0].classMetadata)
+  for (let i = 0, l = sourceNodes.length; i < l; i++) {
+    const node = sourceNodes[i]
+    const { classMetadata } = node
+
+    if (classMetadata) {
+      node.tailwindExp = classMetadataToTailwindExp(classMetadata)
+    }
+  }
+
+  // console.log(ast.children[0].children[1])
+  // console.log(HTML.stringify(sourceNodes))
 })()

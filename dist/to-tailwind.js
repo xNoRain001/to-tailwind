@@ -337,10 +337,11 @@ var spec = require('selector-specificity');
 var readFile = require('fs').promises.readFile;
 var _require = require('./utils'),
   filterNodes = _require.filterNodes,
-  styleToTailwind = _require.styleToTailwind;
+  styleToTailwind = _require.styleToTailwind,
+  classMetadataToTailwindExp = _require.classMetadataToTailwindExp;
 var cssStyleRuleRegexp = /}?\s*([\s\S]*?)\s*{\s*([\s\S]*?)\s*}/g;
 _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-  var css, html, sourceNodes;
+  var css, html, _HTML$parse, sourceNodes, i, l, node, classMetadata;
   return _regeneratorRuntime().wrap(function _callee$(_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
@@ -352,7 +353,7 @@ _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         return readFile('../test/index.html', 'utf-8');
       case 5:
         html = _context.sent;
-        sourceNodes = HTML.parse(html).nodes; // TODO: /* foo */
+        _HTML$parse = HTML.parse(html), _HTML$parse.ast, sourceNodes = _HTML$parse.nodes; // TODO: /* foo */
         css.replace(cssStyleRuleRegexp, function (_, selector, cssText) {
           if (!cssText) {
             return;
@@ -384,10 +385,17 @@ _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
             }
           }
         });
+        for (i = 0, l = sourceNodes.length; i < l; i++) {
+          node = sourceNodes[i];
+          classMetadata = node.classMetadata;
+          if (classMetadata) {
+            node.tailwindExp = classMetadataToTailwindExp(classMetadata);
+          }
+        }
 
-        // const res = sourceNodes.filter(node => node.tagName === 'input')
-        // console.log(res[0].classMetadata)
-      case 8:
+        // console.log(ast.children[0].children[1])
+        // console.log(HTML.stringify(sourceNodes))
+      case 9:
       case "end":
         return _context.stop();
     }

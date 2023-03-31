@@ -13,8 +13,8 @@ const strategies = {
     return nodes.filter(node => node.attrs[name] === value)
   },
 
-  universal () {
-
+  universal (nodes) {
+    return nodes
   },
 
   element (nodes, name) {
@@ -22,14 +22,74 @@ const strategies = {
   },
 
   child (nodes) {
-    return nodes.children
+    const res = []
+
+    for (let i = 0, l = nodes.length; i < l; i++) {
+      Array.prototype.push.apply(res, nodes[i].children)
+    }
+
+    return res
   },
 
-  sibling () {},
+  sibling (nodes) {
+    const res = []
 
-  descendant () {},
+    for (let i = 0, l = nodes.length; i < l; i++) {
+      const node = nodes[i]
+      const { children } = node.parent
+      const index = children.indexOf(node)
 
-  adjacent () {},
+      for (let i = index + 1, l = children.length; i < l; i++) {
+        res.push(children[i])
+      }
+    }
+
+    return res
+  },
+
+  descendant (nodes) {
+    const res = []
+
+    const getDescendantNodes = (res, nodes) => {
+      for (let i = 0, l = nodes.length; i < l; i++) {
+        const node = nodes[i]
+        const { type } = node
+
+        if (type === 'text') {
+          continue
+        }
+
+        res.push(node)
+        const { children } = node
+
+        if (children.length) {
+          getDescendantNodes(res, children)
+        }
+      }
+    }
+
+    for (let i = 0, l = nodes.length; i < l; i++) {
+      const node = nodes[i]
+      getDescendantNodes(res, node.children)
+    }
+    
+    return res
+  },
+
+  adjacent (nodes) {
+    const res = []
+
+    for (let i = 0, l = nodes.length; i < l; i++) {
+      const node = nodes[i]
+      const { children } = node.parent
+      const index = children.indexOf(node)
+      const adjacentNode = children[index + 1]
+      
+      adjacentNode && res.push(adjacentNode)
+    }
+
+    return res
+  },
 
   'pseudo-class' () {},
 
@@ -43,6 +103,7 @@ const filterNodes = (sourceNodes, selector) => {
   for (let i = 0, l = selectorNodes.length; i < l; i++) {
     const { type, name, value } = selectorNodes[i]
     nodes = strategies[type](nodes, name, value) || []
+    // console.log(nodes)
 
     if (!nodes.length) {
       break

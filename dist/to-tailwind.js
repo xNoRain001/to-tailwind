@@ -384,6 +384,9 @@ _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
             }
           }
         });
+
+        // const res = sourceNodes.filter(node => node.tagName === 'input')
+        // console.log(res[0].classMetadata)
       case 8:
       case "end":
         return _context.stop();

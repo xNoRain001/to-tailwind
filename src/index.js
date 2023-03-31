@@ -7,6 +7,7 @@ const { filterNodes, styleToTailwind } = require('./utils')
 const cssStyleRuleRegexp = /}?\s*([\s\S]*?)\s*{\s*([\s\S]*?)\s*}/g
 
 const strategies = {
+  // @layer base
   element (nodes, selector, cssText, specificity) {
 
   },
@@ -57,5 +58,10 @@ const strategies = {
         }
       }
     }
+
+    console.log(nodes)
   })
+
+  // const res = sourceNodes.filter(node => node.tagName === 'input')
+  // console.log(res[0].classMetadata)
 })()

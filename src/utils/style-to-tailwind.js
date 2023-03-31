@@ -6,7 +6,6 @@ const styleToTailwind = (prop, value, specificity, classMetadata) => {
   
   if (expOrMap) {
     const isStaticValue = typeof expOrMap === 'object'
-    // const abbrExp = flag[value] || stylesMap[prop]
     const key = isStaticValue ? prop : expOrMap
 
     if (isStaticValue) {

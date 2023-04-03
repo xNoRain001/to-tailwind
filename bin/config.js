@@ -7,6 +7,11 @@ const config = {
   css: {
     option: '--css <v>',
     descriptor: 'css input'
+  },
+
+  output: {
+    option: '--output <v>',
+    descriptor: 'output'
   }
 }
 

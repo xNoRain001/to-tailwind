@@ -334,26 +334,28 @@ function _asyncToGenerator(fn) {
 
 var HTML = require('./html-parser');
 var spec = require('selector-specificity');
-var readFile = require('fs').promises.readFile;
+var _require$promises = require('fs').promises,
+  readFile = _require$promises.readFile,
+  writeFile = _require$promises.writeFile;
 var _require = require('./utils'),
   filterNodes = _require.filterNodes,
   styleToTailwind = _require.styleToTailwind,
   classMetadataToTailwindExp = _require.classMetadataToTailwindExp;
 var cssStyleRuleRegexp = /}?\s*([\s\S]*?)\s*{\s*([\s\S]*?)\s*}/g;
 var toTailwind = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(input, output) {
-    var css, html, _HTML$parse, ast, sourceNodes, i, l, node, classMetadata;
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(htmlInput, cssInput, output) {
+    var html, css, _HTML$parse, ast, sourceNodes, i, l, node, classMetadata, res;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
-          return readFile('../test/index.css', 'utf-8');
+          return readFile(htmlInput, 'utf-8');
         case 2:
-          css = _context.sent;
-          _context.next = 5;
-          return readFile('../test/index.html', 'utf-8');
-        case 5:
           html = _context.sent;
+          _context.next = 5;
+          return readFile(cssInput, 'utf-8');
+        case 5:
+          css = _context.sent;
           _HTML$parse = HTML.parse(html), ast = _HTML$parse.ast, sourceNodes = _HTML$parse.nodes; // TODO: /* foo */
           css.replace(cssStyleRuleRegexp, function (_, selector, cssText) {
             // .foo {}
@@ -394,14 +396,16 @@ var toTailwind = /*#__PURE__*/function () {
               node.tailwindExp = classMetadataToTailwindExp(classMetadata);
             }
           }
-          console.log(HTML.stringify(ast));
-        case 10:
+          res = HTML.stringify(ast);
+          _context.next = 12;
+          return writeFile(output, res);
+        case 12:
         case "end":
           return _context.stop();
       }
     }, _callee);
   }));
-  return function toTailwind(_x, _x2) {
+  return function toTailwind(_x, _x2, _x3) {
     return _ref.apply(this, arguments);
   };
 }();

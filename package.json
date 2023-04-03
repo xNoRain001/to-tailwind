@@ -11,6 +11,9 @@
   "scripts": {
     "build": "rollup -c -w"
   },
+  "bin": {
+    "to-tailwind": "./bin/www.js"
+  },
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.18.6",
@@ -19,6 +22,7 @@
     "rollup-plugin-babel": "^4.4.0"
   },
   "dependencies": {
+    "commander": "^10.0.0",
     "selector-specificity": "0.1.0"
   }
 }

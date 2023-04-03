@@ -8,8 +8,6 @@ const genElement = node => {
     ? ` ${ genAttrs(attrs, keys, tailwindExp) }` 
     : ''
 
-  console.log(attrs)
-  
   res += `<${ tagName }${ _attrs }>`
 
   if (!selfClosingTags.hasOwnProperty(tagName)) {

@@ -1,6 +1,6 @@
 const HTML = require('./html-parser')
 const spec = require('selector-specificity')
-const { readFile } = require('fs').promises
+const { readFile, writeFile } = require('fs').promises
 
 const { 
   filterNodes, 
@@ -21,9 +21,9 @@ const strategies = {
   }
 }
 
-const toTailwind = async (input, output) => {
-  const css = await readFile('../test/index.css', 'utf-8')
-  const html = await readFile('../test/index.html', 'utf-8')
+const toTailwind = async (htmlInput, cssInput, output) => {
+  const html = await readFile(htmlInput, 'utf-8')
+  const css = await readFile(cssInput, 'utf-8')
   const { ast, nodes: sourceNodes } = HTML.parse(html)
 
   // TODO: /* foo */
@@ -74,7 +74,8 @@ const toTailwind = async (input, output) => {
     }
   }
 
-  console.log(HTML.stringify(ast))
+  const res = HTML.stringify(ast)
+  await writeFile(output, res)
 }
 
 module.exports = toTailwind

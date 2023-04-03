@@ -2,11 +2,11 @@ const spec = require('selector-specificity')
 
 const strategies = {
   id (nodes, name) {
-    return nodes.filter(node => node.id === name)
+    return nodes.filter(node => node.attrs.id === name)
   },
 
   class (nodes, name) {
-    return nodes.filter(node => node.classList?.hasOwnProperty(name))
+    return nodes.filter(node => node.attrs?.class?.hasOwnProperty(name))
   },
  
   attribute (nodes, name, value) {
@@ -17,6 +17,7 @@ const strategies = {
     return nodes
   },
 
+  // type selector
   element (nodes, name) {
     return nodes.filter(node => node.tagName === name)
   },

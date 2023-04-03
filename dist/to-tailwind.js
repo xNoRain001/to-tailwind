@@ -340,64 +340,69 @@ var _require = require('./utils'),
   styleToTailwind = _require.styleToTailwind,
   classMetadataToTailwindExp = _require.classMetadataToTailwindExp;
 var cssStyleRuleRegexp = /}?\s*([\s\S]*?)\s*{\s*([\s\S]*?)\s*}/g;
-_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-  var css, html, _HTML$parse, sourceNodes, i, l, node, classMetadata;
-  return _regeneratorRuntime().wrap(function _callee$(_context) {
-    while (1) switch (_context.prev = _context.next) {
-      case 0:
-        _context.next = 2;
-        return readFile('../test/index.css', 'utf-8');
-      case 2:
-        css = _context.sent;
-        _context.next = 5;
-        return readFile('../test/index.html', 'utf-8');
-      case 5:
-        html = _context.sent;
-        _HTML$parse = HTML.parse(html), _HTML$parse.ast, sourceNodes = _HTML$parse.nodes; // TODO: /* foo */
-        css.replace(cssStyleRuleRegexp, function (_, selector, cssText) {
-          if (!cssText) {
-            return;
-          }
-          var nodes = filterNodes(sourceNodes, selector);
-          if (nodes.length) {
-            var specificity = spec.getSpecificity(selector);
-            var classMetadata = {};
+var toTailwind = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(input, output) {
+    var css, html, _HTML$parse, ast, sourceNodes, i, l, node, classMetadata;
+    return _regeneratorRuntime().wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          _context.next = 2;
+          return readFile('../test/index.css', 'utf-8');
+        case 2:
+          css = _context.sent;
+          _context.next = 5;
+          return readFile('../test/index.html', 'utf-8');
+        case 5:
+          html = _context.sent;
+          _HTML$parse = HTML.parse(html), ast = _HTML$parse.ast, sourceNodes = _HTML$parse.nodes; // TODO: /* foo */
+          css.replace(cssStyleRuleRegexp, function (_, selector, cssText) {
+            // .foo {}
+            if (!cssText) {
+              return;
+            }
+            var nodes = filterNodes(sourceNodes, selector);
+            if (nodes.length) {
+              var specificity = spec.getSpecificity(selector);
+              var classMetadata = {};
 
-            // TODO: why /\s*(.*?)\s*:\s*(.*?);?/g doesn't work ?
-            cssText.replace(/\s*(.*?)\s*:\s*([^;]*);?/g, function (_, prop, value) {
-              styleToTailwind(prop, value, specificity, classMetadata);
-            });
-            for (var i = 0, l = nodes.length; i < l; i++) {
-              var node = nodes[i];
-              var source = node.classMetadata;
-              if (!source) {
-                node.classMetadata = classMetadata;
-              } else {
-                for (var key in classMetadata) {
-                  var value = classMetadata[key];
-                  if (!source[key]) {
-                    source[key] = value;
-                  } else if (source[key].specificity <= value.specificity) {
-                    source[key] = value;
+              // TODO: why /\s*(.*?)\s*:\s*(.*?);?/g doesn't work ?
+              cssText.replace(/\s*(.*?)\s*:\s*([^;]*);?/g, function (_, prop, value) {
+                styleToTailwind(prop, value, specificity, classMetadata);
+              });
+              for (var i = 0, l = nodes.length; i < l; i++) {
+                var node = nodes[i];
+                var source = node.classMetadata;
+                if (!source) {
+                  node.classMetadata = classMetadata;
+                } else {
+                  for (var key in classMetadata) {
+                    var value = classMetadata[key];
+                    if (!source[key]) {
+                      source[key] = value;
+                    } else if (source[key].specificity <= value.specificity) {
+                      source[key] = value;
+                    }
                   }
                 }
               }
             }
+          });
+          for (i = 0, l = sourceNodes.length; i < l; i++) {
+            node = sourceNodes[i];
+            classMetadata = node.classMetadata;
+            if (classMetadata) {
+              node.tailwindExp = classMetadataToTailwindExp(classMetadata);
+            }
           }
-        });
-        for (i = 0, l = sourceNodes.length; i < l; i++) {
-          node = sourceNodes[i];
-          classMetadata = node.classMetadata;
-          if (classMetadata) {
-            node.tailwindExp = classMetadataToTailwindExp(classMetadata);
-          }
-        }
-
-        // console.log(ast.children[0].children[1])
-        // console.log(HTML.stringify(sourceNodes))
-      case 9:
-      case "end":
-        return _context.stop();
-    }
-  }, _callee);
-}))();
+          console.log(HTML.stringify(ast));
+        case 10:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee);
+  }));
+  return function toTailwind(_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}();
+module.exports = toTailwind;

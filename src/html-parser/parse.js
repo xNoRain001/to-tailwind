@@ -59,31 +59,26 @@ const parse = html => {
           // lang="en">
           // foo="bar">foo
           m.replace(/\s*(.*?)=['"]\s*([\s\S]*?)\s*['"]/g, (_, attr, value) => {
+            let formattedValue = {}
+            
             if (attr === 'style') {
-              const styles = {}
-
               value.replace(
                 /\s*(.*?)\s*:\s*(.*?)\s*[;]/g, 
                 (_, styleName, styleValue) => {
-                  styles[styleName] = styleValue
+                  formattedValue[styleName] = styleValue
                 }
               )
-
-              node.styles = styles
             } else if (attr === 'class') {
-              const classList = {}
               const segments = value.split(/\s+/)
 
               for (let i = 0, l = segments.length; i < l; i++) {
-                classList[segments[i]] = null
+                formattedValue[segments[i]] = null
               }
-              
-              node.classList = classList
-            } else if (attr === 'id') {
-              node.id = value
-            } else {
-              attrs[attr] = value
             }
+              
+            attrs[attr] = Object.keys(formattedValue).length
+              ? formattedValue
+              : value
           })
 
           const text = m.match(/>([\s\S]*)/)[1]

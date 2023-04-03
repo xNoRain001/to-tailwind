@@ -21,13 +21,14 @@ const strategies = {
   }
 }
 
-;(async () => {
+const toTailwind = async (input, output) => {
   const css = await readFile('../test/index.css', 'utf-8')
   const html = await readFile('../test/index.html', 'utf-8')
   const { ast, nodes: sourceNodes } = HTML.parse(html)
 
   // TODO: /* foo */
   css.replace(cssStyleRuleRegexp, (_, selector, cssText) => {
+    // .foo {}
     if (!cssText) {
       return
     }
@@ -73,6 +74,7 @@ const strategies = {
     }
   }
 
-  // console.log(ast.children[0].children[1])
-  // console.log(HTML.stringify(sourceNodes))
-})()
+  console.log(HTML.stringify(ast))
+}
+
+module.exports = toTailwind

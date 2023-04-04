@@ -1,6 +1,31 @@
 const stylesMap = {
   width: 'w',
   height: 'h',
+  opacity: 'opacity',
+  padding: 'p',
+  'padding-top': 'pt',
+  'padding-right': 'pr',
+  'padding-bottom': 'pb',
+  'padding-left': 'pl',
+  margin: 'm',
+  'margin-top': 'mt',
+  'margin-right': 'mr',
+  'margin-bottom': 'mb',
+  'margin-left': 'ml',
+  color: 'text',
+  'font-size': 'text',
+  'background-color': 'bg',
+  'font-weight': {
+    100: 'font-thin',
+    200: 'font-extra-light',
+    300: 'font-light',
+    400: 'font-normal',
+    500: 'font-medium',
+    600: 'font-semibold',
+    700: 'font-bold',
+    800: 'font-extrabold',
+    900: 'font-black'
+  },
   position: {
     static: 'static',
     absolute: 'absolute',
@@ -8,11 +33,6 @@ const stylesMap = {
     sticky: 'sticky',
     fixed: 'fixed'
   },
-  'margin-top': 'mt',
-  'margin-left': 'ml',
-  color: 'text',
-  'font-size': 'text',
-  'background-color': 'bg',
   cursor: {
     auto: 'cursor-auto',
     default: 'cursor-default',
@@ -23,7 +43,44 @@ const stylesMap = {
     help: 'cursor-help',
     'not-allowed': 'cursor-not-allowed',
   },
-  opacity: 'opacity'
+  display: {
+    block: 'block',
+    'inline-block': 'inline-block',
+    inline: 'inline',
+    flex:	'flex',
+    'inline-flex': 'inline-flex',
+    table: 'table',
+    'inline-table': 'inline-table',
+    'table-caption': 'table-caption',
+    'table-cell': 'table-cell',
+    'table-column': 'table-column',
+    'table-column-group': 'table-column-group',
+    'table-footer-group': 'table-footer-group',
+    'table-header-group': 'table-header-group',
+    'table-row-group': 'table-row-group',
+    'table-row': 'table-row',
+    'flow-root': 'flow-root',
+    grid: 'grid',
+    'inline-grid': 'inline-grid',
+    contents: 'contents',
+    'list-item': 'list-item',
+    hidden: 'none'
+  },
+  'justify-content': {
+    'flex-start': 'justify-start',
+    'flex-end': 'justify-end',
+    center: 'justify-center',
+    'space-between': 'justify-between',
+    'space-around': 'justify-around',
+    'space-evenly': 'justify-evenly'
+  },
+  'align-items': {
+    'flex-start': 'items-start',
+    'flex-end': 'items-end',
+    center: 'items-center',
+    baseline: 'items-baseline',
+    stretch: 'items-stretch'
+  }
 }
 
 module.exports = stylesMap

@@ -28,15 +28,15 @@ const genAttrs = (attrs, keys, tailwindExp) => {
     const attr = keys[i]
     const value = attrs[attr]
 
-    if (attr === 'class') {
-      // TODO: don't remove source class name
-      res += `class="${ tailwindExp }" `
-    } else {
+    if (attr !== 'class') {
       res += `${ attr }="${ value }" `
-    }
+    } 
   }
 
-  return res.slice(0, -1)
+  // TODO: don't remove source class name
+  res += `class="${ tailwindExp }"`
+
+  return res
 }
 
 const stringify = ast => {

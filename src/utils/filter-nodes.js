@@ -92,9 +92,21 @@ const strategies = {
     return res
   },
 
-  'pseudo-class' () {},
+  'pseudo-class' (nodes, name, value) {
+    return pseudoClassStrategies[name](nodes, value)
+  },
 
   'pseudo-element' () {}
+}
+
+const pseudoClassStrategies = {
+  'first-of-type' (nodes) {
+    return [nodes[0]]
+  },
+
+  'last-of-type' (nodes) {
+    return [nodes[nodes.length - 1]]
+  }
 }
 
 const filterNodes = (sourceNodes, selector) => {
@@ -103,7 +115,7 @@ const filterNodes = (sourceNodes, selector) => {
 
   for (let i = 0, l = selectorNodes.length; i < l; i++) {
     const { type, name, value } = selectorNodes[i]
-    nodes = strategies[type](nodes, name, value) || []
+    nodes = strategies[type](nodes, name, value, selectorNodes[i]) || []
 
     if (!nodes.length) {
       break

@@ -23,6 +23,6 @@
   },
   "dependencies": {
     "commander": "^10.0.0",
-    "selector-specificity": "0.1.0"
+    "selector-specificity": "0.1.1"
   }
 }

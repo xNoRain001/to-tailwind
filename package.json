@@ -1,8 +1,8 @@
 {
   "name": "to-tailwind",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Style or class convert to tailwind.",
-  "keywords": ["to-tailwind"],
+  "keywords": ["to-tailwind", "tailwind", "css"],
   "author": "xNoRain001",
   "repository": {
     "type": "git",

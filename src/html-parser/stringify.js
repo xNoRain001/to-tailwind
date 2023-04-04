@@ -33,8 +33,11 @@ const genAttrs = (attrs, keys, tailwindExp) => {
     } 
   }
 
-  // TODO: don't remove source class name
-  res += `class="${ tailwindExp }"`
+  if (tailwindExp) {
+    // don't add tailwind expression by attr.class because element selector.
+    // TODO: don't remove source class name
+    res += `class="${ tailwindExp }"`
+  }
 
   return res
 }

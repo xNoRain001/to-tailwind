@@ -1,3 +1,8 @@
+## Introduction
+
+Style or class convert to Tailwind expression, then you can use Tailwind to 
+develop and no longer need the style files you wrote earlier.
+
 ## Installation
 
 ```
@@ -5,6 +10,8 @@ npm install -g to-tailwind
 ```
 
 ## Usage
+
+Your HTML file.
 
 ```html
 <!-- ./test/test.html -->
@@ -18,6 +25,7 @@ npm install -g to-tailwind
   <title>Document</title>
   <!-- reset default style -->
   <link rel="stylesheet" href="./base.css">
+  <!-- your css file  -->
   <link rel="stylesheet" href="./test.css">
 </head>
 <body>
@@ -48,6 +56,8 @@ npm install -g to-tailwind
 
 </html>
 ```
+
+Your CSS file.
 
 ```css
 /* ./test/test.css */
@@ -94,11 +104,13 @@ figure > div > figcaption > div:last-of-type {
 }
 ```
 
-run
+Run
 
 ```
-to-tailwind --html ./your-directory/test/index.html --css ./your-directory/test/index.css --output ./your-directory/target/output.html 
+to-tailwind --html ./your-directory/test/test.html --css ./your-directory/test/test.css --output ./your-directory/target/output.html 
 ```
+
+Output file.
 
 ```html
 <!-- ./target/output.html(formatted) -->

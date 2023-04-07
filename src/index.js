@@ -32,7 +32,7 @@ const toTailwind = async (htmlInput, cssInput, output) => {
     if (!cssText) {
       return
     }
-
+    
     const nodes = filterNodes(sourceNodes, selector)
 
     if (nodes.length) {

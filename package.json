@@ -2,7 +2,11 @@
   "name": "to-tailwind",
   "version": "0.1.2",
   "description": "Style or class convert to tailwind.",
-  "keywords": ["to-tailwind", "tailwind", "css"],
+  "keywords": [
+    "to-tailwind",
+    "tailwind",
+    "css"
+  ],
   "author": "xNoRain001",
   "repository": {
     "type": "git",
@@ -23,6 +27,6 @@
   },
   "dependencies": {
     "commander": "^10.0.0",
-    "selector-specificity": "0.1.1"
+    "selector-specificity": "0.2.1"
   }
 }

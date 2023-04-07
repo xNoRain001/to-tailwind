@@ -93,7 +93,13 @@ const strategies = {
   },
 
   'pseudo-class' (nodes, name, value) {
-    return pseudoClassStrategies[name](nodes, value)
+    const strategy = pseudoClassStrategies[name]
+
+    if (strategy) {
+      return strategy(nodes, value)
+    }
+
+    return nodes
   },
 
   'pseudo-element' () {}
@@ -115,6 +121,20 @@ const filterNodes = (sourceNodes, selector) => {
 
   for (let i = 0, l = selectorNodes.length; i < l; i++) {
     const { type, name, value } = selectorNodes[i]
+
+    // .footer a:link,.footer a:visited
+    if (type === 'combine') {
+      const index = selector.indexOf(',')
+      
+      // remove duplicated node
+      nodes = new Set([
+        ...nodes, 
+        ...filterNodes(sourceNodes, selector.slice(index + 1))
+      ])
+
+      break
+    }
+
     nodes = strategies[type](nodes, name, value, selectorNodes[i]) || []
 
     if (!nodes.length) {

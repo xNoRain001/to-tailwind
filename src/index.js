@@ -3,9 +3,10 @@ const spec = require('selector-specificity')
 const { readFile, writeFile } = require('fs').promises
 
 const { 
+  deepClone,
   filterNodes, 
   styleToTailwind, 
-  classMetadataToTailwindExp 
+  classMetadataToTailwindExp
 } = require('./utils')
 
 const cssStyleRuleRegexp = /}?\s*([\s\S]*?)\s*{\s*([\s\S]*?)\s*}/g
@@ -32,7 +33,7 @@ const toTailwind = async (htmlInput, cssInput, output) => {
     if (!cssText) {
       return
     }
-    
+
     const nodes = filterNodes(sourceNodes, selector)
 
     if (nodes.length) {
@@ -45,18 +46,17 @@ const toTailwind = async (htmlInput, cssInput, output) => {
       })
 
       for (let i = 0, l = nodes.length; i < l; i++) {
+        const _classMetadata = deepClone(classMetadata)
         const node = nodes[i]
         const source = node.classMetadata
 
         if (!source) {
-          node.classMetadata = classMetadata
+          node.classMetadata = _classMetadata
         } else {
-          for (const key in classMetadata) {
-            const value = classMetadata[key]
+          for (const key in _classMetadata) {
+            const value = _classMetadata[key]
 
-            if (!source[key]) {
-              source[key] = value
-            } else if (source[key].specificity <= value.specificity) {
+            if (!source[key] || source[key].specificity <= value.specificity) {
               source[key] = value
             }
           }

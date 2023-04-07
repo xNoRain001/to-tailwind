@@ -120,22 +120,23 @@ const filterNodes = (sourceNodes, selector) => {
   const selectorNodes = spec.getNodes(selector)
 
   for (let i = 0, l = selectorNodes.length; i < l; i++) {
-    const { type, name, value } = selectorNodes[i]
-
+    const selectorNode = selectorNodes[i]
+    const { type, name, value } = selectorNode
+    
     // .footer a:link,.footer a:visited
     if (type === 'combine') {
       const index = selector.indexOf(',')
       
       // remove duplicated node
-      nodes = new Set([
+      nodes = [...new Set([
         ...nodes, 
         ...filterNodes(sourceNodes, selector.slice(index + 1))
-      ])
+      ])]
 
       break
     }
 
-    nodes = strategies[type](nodes, name, value, selectorNodes[i]) || []
+    nodes = strategies[type](nodes, name, value, selectorNode) || []
 
     if (!nodes.length) {
       break

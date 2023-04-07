@@ -338,6 +338,7 @@ var _require$promises = require('fs').promises,
   readFile = _require$promises.readFile,
   writeFile = _require$promises.writeFile;
 var _require = require('./utils'),
+  deepClone = _require.deepClone,
   filterNodes = _require.filterNodes,
   styleToTailwind = _require.styleToTailwind,
   classMetadataToTailwindExp = _require.classMetadataToTailwindExp;
@@ -372,16 +373,15 @@ var toTailwind = /*#__PURE__*/function () {
                 styleToTailwind(prop, value, specificity, classMetadata);
               });
               for (var i = 0, l = nodes.length; i < l; i++) {
+                var _classMetadata = deepClone(classMetadata);
                 var node = nodes[i];
                 var source = node.classMetadata;
                 if (!source) {
-                  node.classMetadata = classMetadata;
+                  node.classMetadata = _classMetadata;
                 } else {
-                  for (var key in classMetadata) {
-                    var value = classMetadata[key];
-                    if (!source[key]) {
-                      source[key] = value;
-                    } else if (source[key].specificity <= value.specificity) {
+                  for (var key in _classMetadata) {
+                    var value = _classMetadata[key];
+                    if (!source[key] || source[key].specificity <= value.specificity) {
                       source[key] = value;
                     }
                   }

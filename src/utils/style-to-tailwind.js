@@ -27,6 +27,7 @@ const styleToTailwind = (prop, value, specificity, classMetadata) => {
       specificity
     }
   } else {
+    console.log(prop)
     // not support
   }
 }

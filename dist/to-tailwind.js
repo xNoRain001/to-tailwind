@@ -345,19 +345,22 @@ var _require = require('./utils'),
 var cssStyleRuleRegexp = /}?\s*([\s\S]*?)\s*{\s*([\s\S]*?)\s*}/g;
 var toTailwind = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(htmlInput, cssInput, output) {
-    var html, css, _HTML$parse, ast, sourceNodes, i, l, node, classMetadata, res;
+    var css, html, _HTML$parse, ast, sourceNodes, i, l, node, classMetadata, res;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.next = 2;
-          return readFile(htmlInput, 'utf-8');
-        case 2:
-          html = _context.sent;
-          _context.next = 5;
           return readFile(cssInput, 'utf-8');
-        case 5:
+        case 2:
           css = _context.sent;
-          _HTML$parse = HTML.parse(html), ast = _HTML$parse.ast, sourceNodes = _HTML$parse.nodes; // TODO: /* foo */
+          _context.next = 5;
+          return readFile(htmlInput, 'utf-8');
+        case 5:
+          html = _context.sent;
+          // remove commented code
+          css = css.replace(/\/\*[\s\S]*?\*\//g, '');
+          html = html.replace(/<!--[\s\S]*?-->/g, '');
+          _HTML$parse = HTML.parse(html), ast = _HTML$parse.ast, sourceNodes = _HTML$parse.nodes;
           css.replace(cssStyleRuleRegexp, function (_, selector, cssText) {
             // .foo {}
             if (!cssText) {
@@ -397,9 +400,9 @@ var toTailwind = /*#__PURE__*/function () {
             }
           }
           res = HTML.stringify(ast);
-          _context.next = 12;
+          _context.next = 14;
           return writeFile(output, res);
-        case 12:
+        case 14:
         case "end":
           return _context.stop();
       }

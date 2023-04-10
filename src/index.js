@@ -23,11 +23,15 @@ const strategies = {
 }
 
 const toTailwind = async (htmlInput, cssInput, output) => {
-  const html = await readFile(htmlInput, 'utf-8')
-  const css = await readFile(cssInput, 'utf-8')
+  let css = await readFile(cssInput, 'utf-8')
+  let html = await readFile(htmlInput, 'utf-8')
+
+  // remove commented code
+  css = css.replace(/\/\*[\s\S]*?\*\//g, '')
+  html = html.replace(/<!--[\s\S]*?-->/g, '')
+
   const { ast, nodes: sourceNodes } = HTML.parse(html)
 
-  // TODO: /* foo */
   css.replace(cssStyleRuleRegexp, (_, selector, cssText) => {
     // .foo {}
     if (!cssText) {

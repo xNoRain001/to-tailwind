@@ -1,4 +1,4 @@
-const { stylesMap, flexibleProps } = require("../const")
+const { stylesMap, straregyOfFlexibleProps } = require("../const")
 
 const styleToTailwind = (prop, value, specificity, classMetadata) => {
   let tailwindExp = ''
@@ -13,10 +13,11 @@ const styleToTailwind = (prop, value, specificity, classMetadata) => {
       tailwindExp += `${ expOrMap[value] }`      
     } else {
       // width: 9999px; -> w-[9999px]
-      if (flexibleProps.hasOwnProperty(prop)) {
+      const strategy = straregyOfFlexibleProps[prop]
+
+      if (strategy) {
         value = value.replace(/\s{2,}/, ' ')
-        // TODO: handle flexible props
-        tailwindExp += `${ expOrMap }-[${ value }]` 
+        tailwindExp += strategy(value)
       } else {
         tailwindExp += `${ expOrMap }-[${ value }]`
       }

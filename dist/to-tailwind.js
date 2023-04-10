@@ -399,10 +399,21 @@ var toTailwind = /*#__PURE__*/function () {
               node.tailwindExp = classMetadataToTailwindExp(classMetadata);
             }
           }
+
+          // import tailwind for test
+          ast.children[0].children[0].children.push({
+            type: 'tag',
+            attrs: {
+              src: 'https://cdn.tailwindcss.com'
+            },
+            parent: ast.children[0].children[0],
+            tagName: 'script',
+            children: []
+          });
           res = HTML.stringify(ast);
-          _context.next = 14;
+          _context.next = 15;
           return writeFile(output, res);
-        case 14:
+        case 15:
         case "end":
           return _context.stop();
       }

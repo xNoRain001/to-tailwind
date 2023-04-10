@@ -1,7 +1,7 @@
 const stylesMap = require('./styles-map')
-const flexibleProps = require('./flexible-props')
+const straregyOfFlexibleProps = require('./strategy-of-flexible-props')
 
 module.exports = { 
   stylesMap,
-  flexibleProps
+  straregyOfFlexibleProps
 }

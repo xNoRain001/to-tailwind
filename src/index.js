@@ -78,6 +78,17 @@ const toTailwind = async (htmlInput, cssInput, output) => {
     }
   }
 
+  // import tailwind for test
+  ast.children[0].children[0].children.push({
+    type: 'tag',
+    attrs: {
+      src: 'https://cdn.tailwindcss.com'
+    },
+    parent: ast.children[0].children[0],
+    tagName: 'script',
+    children: []
+  })
+
   const res = HTML.stringify(ast)
   await writeFile(output, res)
 }

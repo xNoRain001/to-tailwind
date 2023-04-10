@@ -16,9 +16,29 @@ const stylesMap = {
   right: 'r',
   bottom: 'b',
   left: 'l',
+  border: 'border',
   'border-radius': 'rounded',
+  'border-width': 'border',
+  'border-top-width': 'border-t',
+  'border-right-width': 'border-r',
+  'border-bottom-width': 'border-b',
+  'border-left-width': 'border-l',
+  'border-color': 'border',
+  'border-top-color': 'border-t',
+  'border-right-color': 'border-r',
+  'border-bottom-color': 'border-b',
+  'border-left-color': 'border-l',
+  'border-top-style': 'border-t',
+  'border-right-style': 'border-r',
+  'border-bottom-style': 'border-b',
+  'border-left-style': 'border-l',
+  'border-top': 'border-t',
+  'border-right': 'border-r',
+  'border-bottom': 'border-b',
+  'border-left': 'border-l',
   color: 'text',
   'font-size': 'text',
+  'font-family': 'font',
   'background-color': 'bg',
   'min-width': 'min-w',
   'line-height': 'leading',
@@ -169,6 +189,41 @@ const stylesMap = {
     underline: 'underline',
     'line-through': 'line-througn',
     none: 'no-underline'
+  },
+  'border-style': {
+    solid: 'border-solid',
+    dashed: 'border-dashed',
+    dotted: 'border-dotted',
+    double: 'border-double',
+    hidden: 'border-hidden',
+    none: 'border-none',
+  },
+  'vertical-align': {
+    baseline: 'align-baseline',
+    top: 'align-top',
+    middle: 'align-middle',
+    bottom: 'align-bottom',
+    'text-top': 'align-text-top',
+    'text-bottom': 'align-text-bottom',
+    sub: 'align-sub',
+    super: 'align-super'
+  },
+  'font-variant-numeric': {
+    normal: 'normal-nums',
+    ordinal: 'ordinal',
+    'slashed-zero': 'slashed-zero',
+    'lining-nums': 'lining-nums',
+    'oldstyle-nums': 'oldstyle-nums',
+    'proportional-nums': 'proportional-nums',
+    'tabular-nums': 'tabular-nums',
+    'diagonal-fractions': 'diagonal-fractions',
+    'stacked-fractions': 'stacked-fractions'
+  },
+
+  'list-style-type': {
+    none: 'list-none',
+    disc: 'list-disc',
+    decimal: 'list-decimal'
   }
 }
 

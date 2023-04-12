@@ -44,6 +44,8 @@ const stylesMap = {
   'line-height': 'leading',
   'flex-wrap': 'wrap',
   'z-index': 'z',
+  'list-style-image': 'list-image',
+  'list-style': null,
   'font-weight': {
     100: 'font-thin',
     200: 'font-extra-light',
@@ -219,11 +221,14 @@ const stylesMap = {
     'diagonal-fractions': 'diagonal-fractions',
     'stacked-fractions': 'stacked-fractions'
   },
-
   'list-style-type': {
     none: 'list-none',
     disc: 'list-disc',
     decimal: 'list-decimal'
+  },
+  'list-style-position': {
+    inside: 'list-inside',
+    outside: 'list-outside'
   }
 }
 

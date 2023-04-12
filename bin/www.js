@@ -4,7 +4,7 @@ const { resolve } = require('path')
 const { Command } = require('commander')
 
 const config = require('./config')
-const toTailwind = require('../src')
+const toTailwind = require('../dist/to-tailwind.min')
 
 const program = new Command()
 

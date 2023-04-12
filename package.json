@@ -10,7 +10,7 @@
   "author": "xNoRain001",
   "repository": {
     "type": "git",
-    "url": "git://github.com/xNoRain001/to-tailwind.git"
+    "url": "https://github.com/xNoRain001/to-tailwind.git"
   },
   "scripts": {
     "build": "rollup -c -w"
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "commander": "^10.0.0",
+    "css-shorthand-parser": "^0.2.0",
     "selector-specificity": "0.2.3"
   }
 }

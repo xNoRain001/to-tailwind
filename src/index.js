@@ -46,7 +46,7 @@ const toTailwind = async (htmlInput, cssInput, output) => {
 
       // TODO: why /\s*(.*?)\s*:\s*(.*?);?/g doesn't work ?
       cssText.replace(/\s*(.*?)\s*:\s*([^;]*);?/g, (_, prop, value) => {
-        styleToTailwind(prop, value, specificity, classMetadata)
+        styleToTailwind(selector, prop, value, specificity, classMetadata)
       })
 
       for (let i = 0, l = nodes.length; i < l; i++) {

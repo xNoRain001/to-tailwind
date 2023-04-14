@@ -1,10 +1,10 @@
 const { stylesMap } = require("../const")
 const shorthandParser = require('css-shorthand-parser')
 
-const styleToTailwind = (prop, value, specificity, classMetadata) => {
+const styleToTailwind = (selector, prop, value, specificity, classMetadata) => {
   let tailwindExp = ''
   const expOrMap = stylesMap[prop]
-  
+
   if (expOrMap) {
     const isStaticValue = typeof expOrMap === 'object'
     const key = isStaticValue ? prop : expOrMap
@@ -24,10 +24,23 @@ const styleToTailwind = (prop, value, specificity, classMetadata) => {
           const prop = props[i]
           const value = res[prop]
 
-          styleToTailwind(prop, value, specificity, classMetadata)
+          if (value !== 'unset') {
+            styleToTailwind(selector, prop, value, specificity, classMetadata)
+          }
         }
       } else {
-        tailwindExp += `${ expOrMap }-[${ value }]`
+        if (expOrMap === 'content') {
+          const content = value.match(/['"](.*?)['"]/)[1]
+
+          if (content) {
+            const index = selector.lastIndexOf(':')
+            const prefix = selector.slice(index + 1)
+            
+            tailwindExp += `${ prefix }:${ expOrMap }-['${ content }']`
+          }
+        } else {
+          tailwindExp += `${ expOrMap }-[${ value }]`
+        }
       }
     }
 
@@ -37,7 +50,7 @@ const styleToTailwind = (prop, value, specificity, classMetadata) => {
     }
   } else {
     // not support
-    console.log(prop)
+    // console.log(prop)
   }
 }
 

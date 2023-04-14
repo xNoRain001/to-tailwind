@@ -46,12 +46,21 @@ const stylesMap = {
   'flex-grow': 'flex-grow',
   'flex-shrink': 'flex-shrink',
   'flex-basis': 'flex-basis',
-  // 'animation': 'shorthand-animation',
+  'background': 'shorthand-background',
+  'animation': 'shorthand-animation',
+  'animation-duration': 'duration',
+  'animation-name': 'animate',
+  'transition': 'shorthand-transition',
+  'transition-duration': 'duration',
+  'transition-property': 'transition',
+  'font': 'shorthand-font',
   'line-height': 'leading',
   'flex-wrap': 'wrap',
   'z-index': 'z',
   'list-style-image': 'list-image',
   'list-style': 'shorthand-list-style',
+  'background-image': 'bg',
+  'content': 'content',
   'font-weight': {
     100: 'font-thin',
     200: 'font-extra-light',
@@ -235,6 +244,61 @@ const stylesMap = {
   'list-style-position': {
     inside: 'list-inside',
     outside: 'list-outside'
+  },
+  'font-style': {
+    italic: 'italic',
+    normal: 'not-italic'
+  },
+  'background-size': {
+    auto: 'bg-auto',
+    cover: 'bg-cover',
+    contain: 'bg-contain'
+  },
+  'background-repeat': {
+    repeat: 'bg-repeat',
+    'no-repeat': 'bg-no-repeat',
+    'repeat-x': 'bg-repeat-x',
+    'repeat-y': 'bg-repeat-y',
+    round: 'bg-repeat-round',
+    space: 'bg-repeat-space'
+  },
+  'background-position': {
+    top: 'bg-top',
+    right: 'bg-right',
+    bottom: 'bg-bottom',
+    left: 'bg-left',
+    center: 'bg-center',
+    'left bottom': 'bg-left-bottom',
+    'left top': 'bg-left-top',
+    'right bottom': 'bg-right-bottom',
+    'right top': 'bg-right-top'
+  },
+  'background-origin': {
+    'border-box': 'bg-origin-border',
+    'padding-box': 'bg-origin-padding',
+    'content-box': 'bg-origin-content'
+  },
+  'background-clip': {
+    'border-box': 'bg-clip-border',
+    'padding-box': 'bg-clip-padding',
+    'content-box': 'bg-clip-content',
+    text: 'bg-clip-text',
+  },
+  'background-attachment': {
+    fixed: 'bg-fixed',
+    local: 'bg-local',
+    scroll: 'bg-scroll'
+  },
+  'transform-origin': {
+    top: 'origin-top',
+    right: 'origin-right',
+    bottom: 'origin-bottom',
+    left: 'origin-left',
+    center: 'origin-center',
+    'top-right': 'origin-top-right',
+    'top-left': 'origin-top-left',
+    'bottom-right': 'origin-bottom-right',
+    'bottom-left': 'origin-bottom-left'
   }
 }
 

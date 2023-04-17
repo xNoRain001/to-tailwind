@@ -26,16 +26,28 @@ const importTailwind = ast => {
 }
 
 const importCss = ast => {
-  ast.children[0].children[0].children.push({
-    type: 'tag',
-    attrs: {
-      rel: 'stylesheet',
-      href: './index.css'
+  ast.children[0].children[0].children.push(
+    {
+      type: 'tag',
+      attrs: {
+        rel: 'stylesheet',
+        href: './index.css'
+      },
+      parent: ast.children[0].children[0],
+      tagName: 'link',
+      children: []
     },
-    parent: ast.children[0].children[0],
-    tagName: 'link',
-    children: []
-  })
+    {
+      type: 'tag',
+      attrs: {
+        rel: 'stylesheet',
+        href: './media.css'
+      },
+      parent: ast.children[0].children[0],
+      tagName: 'link',
+      children: []
+    }
+  )
 }
 
 const toTailwind = async (htmlInput, cssInput, output) => {

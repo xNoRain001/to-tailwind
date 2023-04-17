@@ -2,15 +2,16 @@ const spec = require('selector-specificity')
 
 const filterNodes = require('./filter-nodes')
 const styleToTailwind = require('./style-to-tailwind')
+const parseMediaQuery = require('./parse-media-query')
 const classMetadataToTailwindExp = require('./class-metadata-to-tailwind-exp')
 const { stylesMap } = require('./const')
 const { deepClone } = require('./utils')
 
 const cssStyleRuleRegexp = /}?\s*([\s\S]*?)\s*{\s*([\s\S]*?)\s*}/g
-
 const cssToClassMetadata = (css, sourceNodes) => {
   let rawCss = {}
-
+  css = parseMediaQuery(css)
+  
   css.replace(cssStyleRuleRegexp, (_, selector, cssText) => {
     // empty rule -> .foo {}
     if (!cssText) {

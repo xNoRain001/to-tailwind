@@ -30,13 +30,18 @@ const genAttrs = (attrs, keys, tailwindExp) => {
 
     if (attr !== 'class') {
       res += `${ attr }="${ value }" `
-    } 
+    }
   }
 
   if (tailwindExp) {
     // don't add tailwind expression by attr.class because element selector.
-    // TODO: don't remove source class name
-    res += `class="${ tailwindExp }"`
+    res += `class="${ tailwindExp } `
+
+    if (attrs.class) {
+      res += `${ Object.keys(attrs.class).join() }`
+    }
+
+    res += '"'
   }
 
   return res

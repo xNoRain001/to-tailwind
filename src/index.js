@@ -87,10 +87,10 @@ const toTailwind = async (htmlInput, cssInput, output) => {
 
   for (let i = 0, l = sourceNodes.length; i < l; i++) {
     const node = sourceNodes[i]
-    const { classMetadata } = node
+    const { classMetadata, attrs } = node
 
     if (classMetadata) {
-      node.tailwindExp = classMetadataToTailwindExp(classMetadata)
+      node.tailwindExp = classMetadataToTailwindExp(classMetadata, attrs.rawClass)
     }
   }
 
@@ -103,8 +103,17 @@ const toTailwind = async (htmlInput, cssInput, output) => {
     parent: ast.children[0].children[0],
     tagName: 'script',
     children: []
+  }, {
+    type: 'tag',
+    attrs: {
+      rel: 'stylesheet',
+      href: './index.css'
+    },
+    parent: ast.children[0].children[0],
+    tagName: 'link',
+    children: []
   })
-
+  
   const res = HTML.stringify(ast)
   await writeFile(output, res)
 
@@ -114,12 +123,16 @@ const toTailwind = async (htmlInput, cssInput, output) => {
     const rules = rawCss[selector]
 
     for (const prop in rules) {
-      _rawCss += `${ prop }: ${ rules[prop] };`
+      let value = rules[prop]
+      value = value.startsWith('url("data:image')
+        ? value.replace(/my-semicolon/, ';')
+        : value
+      _rawCss += `${ prop }: ${ value };`
     }
 
     _rawCss += '}\r\n'
   }
-  // await(writeFile('./target/index.css', _rawCss))
+  await(writeFile('./target/index.css', _rawCss))
 }
 
 module.exports = toTailwind

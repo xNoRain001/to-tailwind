@@ -1,5 +1,6 @@
-const classMetadataToTailwindExp = classMetadata => {
-  let tailwindExp = ''
+const classMetadataToTailwindExp = (classMetadata, rawClass) => {
+
+  let tailwindExp = rawClass ? `${ rawClass } ` : ''
   
   for (const key in classMetadata) {
     tailwindExp += `${ classMetadata[key].tailwindExp } `

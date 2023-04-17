@@ -1,4 +1,4 @@
-const { stylesMap } = require("../const")
+const { stylesMap } = require("./const")
 const shorthandParser = require('css-shorthand-parser')
 
 const styleToTailwind = (selector, prop, value, specificity, classMetadata) => {

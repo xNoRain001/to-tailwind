@@ -59,7 +59,7 @@ const stylesMap = {
   'z-index': 'z',
   'list-style-image': 'list-image',
   'list-style': 'shorthand-list-style',
-  'background-image': 'bg',
+  // 'background-image': 'bg',
   'content': 'content',
   'transform': 'transform',
   'font-weight': {

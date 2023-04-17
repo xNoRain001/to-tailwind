@@ -2,6 +2,7 @@ const HTML = require('./html-parser')
 const spec = require('selector-specificity')
 const { readFile, writeFile } = require('fs').promises
 
+const { stylesMap } = require('./const')
 const { 
   deepClone,
   filterNodes, 
@@ -30,9 +31,15 @@ const toTailwind = async (htmlInput, cssInput, output) => {
   css = css.replace(/\/\*[\s\S]*?\*\//g, '')
   html = html.replace(/<!--[\s\S]*?-->/g, '')
 
+  css = css.replace(/url\(['"](.*?)['"]\)/g, (_, $1) => {
+    return `url("${ $1.replace(/;/g, 'my-semicolon') }")`
+  })
+
   const { ast, nodes: sourceNodes } = HTML.parse(html)
 
-  css.replace(cssStyleRuleRegexp, (_, selector, cssText) => {
+  let rawCss = {}
+
+  css.replace(cssStyleRuleRegexp, (cssStyleRule, selector, cssText) => {
     // .foo {}
     if (!cssText) {
       return
@@ -46,7 +53,16 @@ const toTailwind = async (htmlInput, cssInput, output) => {
 
       // TODO: why /\s*(.*?)\s*:\s*(.*?);?/g doesn't work ?
       cssText.replace(/\s*(.*?)\s*:\s*([^;]*);?/g, (_, prop, value) => {
-        styleToTailwind(selector, prop, value, specificity, classMetadata)
+        if (stylesMap[prop]) {
+          if (value.startsWith('url("data:image')) {
+            value = value.replace(/my-semicolon/g, ';')
+          }
+  
+          styleToTailwind(selector, prop, value, specificity, classMetadata)
+        } else {
+          rawCss[selector] = rawCss[selector] || {}
+          rawCss[selector][prop] = value
+        }
       })
 
       for (let i = 0, l = nodes.length; i < l; i++) {
@@ -91,6 +107,19 @@ const toTailwind = async (htmlInput, cssInput, output) => {
 
   const res = HTML.stringify(ast)
   await writeFile(output, res)
+
+  let _rawCss = ''
+  for (const selector in rawCss) {
+    _rawCss += `${ selector } {`
+    const rules = rawCss[selector]
+
+    for (const prop in rules) {
+      _rawCss += `${ prop }: ${ rules[prop] };`
+    }
+
+    _rawCss += '}\r\n'
+  }
+  // await(writeFile('./target/index.css', _rawCss))
 }
 
 module.exports = toTailwind

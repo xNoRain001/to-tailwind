@@ -38,6 +38,16 @@ const styleToTailwind = (selector, prop, value, specificity, classMetadata) => {
             
             tailwindExp += `${ prefix }:${ expOrMap }-['${ content }']`
           }
+        } else if (expOrMap === 'transform') {
+          value.replace(/([a-z]+?)([A-Z]+)?\(([^,]+)(,.+)?\)/, (_, p, d = '', vx, vy) => {
+            if (d) {
+              p = p.slice(0, -1)
+              d = d.toLowerCase()
+              tailwindExp += `${ p }-${ d }-[${ vx }]`
+            } else {
+              tailwindExp += `${ p }-x-[${ vx }] ${ p }-y-[${ vx }]`
+            }
+          })
         } else {
           tailwindExp += `${ expOrMap }-[${ value }]`
         }

@@ -4,7 +4,6 @@ const filterNodes = require('./filter-nodes')
 const styleToTailwind = require('./style-to-tailwind')
 const parseMediaQuery = require('./parse-media-query')
 const classMetadataToTailwindExp = require('./class-metadata-to-tailwind-exp')
-const { stylesMap } = require('./const')
 const { deepClone } = require('./utils')
 
 const cssStyleRuleRegexp = /}?\s*([\s\S]*?)\s*{\s*([\s\S]*?)\s*}/g
@@ -26,16 +25,9 @@ const cssToClassMetadata = (css, sourceNodes) => {
 
       // TODO: why /\s*(.*?)\s*:\s*(.*?);?/g doesn't work ?
       cssText.replace(/\s*(.*?)\s*:\s*([^;]*);?/g, (_, prop, value) => {
-        if (stylesMap[prop]) {
-          if (value.startsWith('url("data:image')) {
-            value = value.replace(/my-semicolon/g, ';')
-          }
-
-          styleToTailwind(selector, prop, value, specificity, classMetadata)
-        } else {
-          rawCss[selector] = rawCss[selector] || {}
-          rawCss[selector][prop] = value
-        }
+        styleToTailwind(
+          selector, prop, value, specificity, classMetadata, rawCss
+        )
       })
 
       for (let i = 0, l = nodes.length; i < l; i++) {

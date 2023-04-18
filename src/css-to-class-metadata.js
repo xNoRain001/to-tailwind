@@ -11,7 +11,7 @@ const cssStyleRuleRegexp = /}?\s*([\s\S]*?)\s*{\s*([\s\S]*?)\s*}/g
 const cssToClassMetadata = (css, sourceNodes) => {
   let rawCss = {}
   css = parseMediaQuery(css)
-  
+
   css.replace(cssStyleRuleRegexp, (_, selector, cssText) => {
     // empty rule -> .foo {}
     if (!cssText) {

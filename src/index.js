@@ -37,16 +37,16 @@ const importCss = ast => {
       tagName: 'link',
       children: []
     },
-    {
-      type: 'tag',
-      attrs: {
-        rel: 'stylesheet',
-        href: './media.css'
-      },
-      parent: ast.children[0].children[0],
-      tagName: 'link',
-      children: []
-    }
+    // {
+    //   type: 'tag',
+    //   attrs: {
+    //     rel: 'stylesheet',
+    //     href: './media.css'
+    //   },
+    //   parent: ast.children[0].children[0],
+    //   tagName: 'link',
+    //   children: []
+    // }
   )
 }
 

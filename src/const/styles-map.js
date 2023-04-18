@@ -55,7 +55,6 @@ const stylesMap = {
   'transition-property': 'transition',
   'font': 'shorthand-font',
   'line-height': 'leading',
-  'flex-wrap': 'wrap',
   'z-index': 'z',
   'list-style-image': 'list-image',
   'list-style': 'shorthand-list-style',
@@ -300,6 +299,11 @@ const stylesMap = {
     'top-left': 'origin-top-left',
     'bottom-right': 'origin-bottom-right',
     'bottom-left': 'origin-bottom-left'
+  },
+  'flex-wrap': {
+    wrap: 'flex-wrap',
+    'wrap-reverse': 'flex-wrap-reverse',
+    nowrap: 'flex-nowrap'
   }
 }
 

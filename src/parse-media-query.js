@@ -1,4 +1,4 @@
-const regexp = /(@media[^\{]+\{([^\{\}]*\{[^\}\{]*\})+[^\}]+\})/g
+const regexp = /@media[^\{]+\{([^\{\}]*\{[^\}\{]*\})+[^\}]+\}/g
 
 const parseMediaQuery = css => {
   css = css.replace(regexp, (_, $1) => {

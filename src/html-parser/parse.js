@@ -100,6 +100,16 @@ const parse = html => {
       }
     } else {
       parent = parent.parent
+      
+      // </i> some text...
+      const text = m.match(/<\/[a-z]+>\s*(.+)\s*/)?.[1]
+
+      if (text) {
+        parent.children.push({
+          type: 'text',
+          text
+        })
+      }
     }
   }
 

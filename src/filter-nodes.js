@@ -112,6 +112,14 @@ const pseudoClassStrategies = {
 
   'last-of-type' (nodes) {
     return [nodes[nodes.length - 1]]
+  },
+
+  'before' (nodes) {
+    return nodes
+  },
+
+  'after' (nodes) {
+    return nodes
   }
 }
 

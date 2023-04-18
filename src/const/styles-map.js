@@ -110,7 +110,7 @@ const stylesMap = {
     'inline-grid': 'inline-grid',
     contents: 'contents',
     'list-item': 'list-item',
-    hidden: 'none'
+    none: 'hidden'
   },
   float: {
     right: 'float-right',

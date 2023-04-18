@@ -6,10 +6,15 @@ const styleToTailwind = (selector, prop, value, specificity, classMetadata) => {
   const expOrMap = stylesMap[prop]
   const isStaticValue = typeof expOrMap === 'object'
   const key = isStaticValue ? prop : expOrMap
+  const prefix = selector.endsWith(':before')
+    ? 'before:'
+    : selector.endsWith(':after')
+      ? 'after:'
+      : ''
 
   if (isStaticValue) {
     // position: absolute; -> absolute
-    tailwindExp += `${ expOrMap[value] }`      
+    tailwindExp += `${ prefix }${ expOrMap[value] }`      
   } else {
     // width: 9999px; -> w-[9999px]
     value = String(value).replace(/\s{2,}/, ' ')
@@ -31,23 +36,20 @@ const styleToTailwind = (selector, prop, value, specificity, classMetadata) => {
         const content = value.match(/['"](.*?)['"]/)[1]
 
         if (content) {
-          const index = selector.lastIndexOf(':')
-          const prefix = selector.slice(index + 1)
-          
-          tailwindExp += `${ prefix }:${ expOrMap }-['${ content }']`
+          tailwindExp += `${ prefix }${ expOrMap }-['${ content }']`
         }
       } else if (expOrMap === 'transform') {
         value.replace(/([a-z]+?)([A-Z]+)?\(([^,]+)(,.+)?\)/, (_, p, d = '', vx, vy) => {
           if (d) {
             p = p.slice(0, -1)
             d = d.toLowerCase()
-            tailwindExp += `${ p }-${ d }-[${ vx }]`
+            tailwindExp += `${ prefix }${ p }-${ d }-[${ vx }]`
           } else {
-            tailwindExp += `${ p }-x-[${ vx }] ${ p }-y-[${ vx }]`
+            tailwindExp += `${ prefix }${ p }-x-[${ vx }] ${ p }-y-[${ vx }]`
           }
         })
       } else {
-        tailwindExp += `${ expOrMap }-[${ value }]`
+        tailwindExp += `${ prefix }${ expOrMap }-[${ value }]`
       }
     }
   }

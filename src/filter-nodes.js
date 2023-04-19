@@ -99,7 +99,7 @@ const strategies = {
       return strategy(nodes, value)
     }
 
-    return nodes
+    return []
   },
 
   'pseudo-element' () {}
@@ -120,6 +120,14 @@ const pseudoClassStrategies = {
 
   'after' (nodes) {
     return nodes
+  },
+
+  'link' (nodes) {
+    return nodes
+  },
+
+  'visited' (nodes) {
+    return nodes
   }
 }
 
@@ -131,8 +139,10 @@ const filterNodes = (sourceNodes, selector) => {
     const selectorNode = selectorNodes[i]
     const { type, name, value } = selectorNode
     
+    // TODO: more combine selector
     // .footer a:link,.footer a:visited
     if (type === 'combine') {
+      // console.log(selector)
       const index = selector.indexOf(',')
       
       // remove duplicated node

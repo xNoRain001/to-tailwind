@@ -8,6 +8,13 @@ const purifier = async (htmlInput, cssInput) => {
   css = css.replace(/\/\*[\s\S]*?\*\//g, '')
   html = html.replace(/<!--[\s\S]*?-->/g, '')
 
+  // remove unnecessary white space
+  css = css
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s?([{}(),:;])\s?/g, (_, $1) => $1)
+    .trim()
+
+  // replace base64's ;
   css = css.replace(/url\(['"](.*?)['"]\)/g, (_, $1) => {
     return `url("${ $1.replace(/;/g, 'my-semicolon') }")`
   })

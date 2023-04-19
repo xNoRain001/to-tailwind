@@ -7,6 +7,16 @@ const rawCssCollector = (rawCss, selector, prop, value) => {
   rawCss[selector][prop] = value 
 }
 
+const prefixParser = selector => {
+  let prefix = ''
+
+  selector.replace(/:([a-z]+)/, (_, $1) => {
+    prefix = `${ $1 }:`
+  })
+  
+  return prefix
+}
+
 const styleToTailwind = (
   selector, prop, value, specificity, classMetadata, rawCss
 ) => {
@@ -19,18 +29,14 @@ const styleToTailwind = (
     const expOrMap = stylesMap[prop]
     const isStaticValue = typeof expOrMap === 'object'
     const key = isStaticValue ? prop : expOrMap
-    const prefix = selector.endsWith(':before')
-      ? 'before:'
-      : selector.endsWith(':after')
-        ? 'after:'
-        : ''
-
+    const prefix = prefixParser(selector)
+    
     if (isStaticValue) {
       const keywordValue = expOrMap[value]
 
       if (keywordValue) {
-        // position: absolute; -> absolute
-        tailwindExp += `${ prefix }${ expOrMap[value] }`  
+        // position: absolute; -> absolute  
+        tailwindExp += `${ prefix }${ expOrMap[value] } `  
       } else {
         rawCssCollector(rawCss, selector, prop, value)
       }

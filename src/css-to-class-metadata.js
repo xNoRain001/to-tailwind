@@ -1,17 +1,20 @@
 const spec = require('selector-specificity')
 
 const filterNodes = require('./filter-nodes')
+const parseKeyframes = require('./parse-keyframes')
 const styleToTailwind = require('./style-to-tailwind')
 const parseMediaQuery = require('./parse-media-query')
 const classMetadataToTailwindExp = require('./class-metadata-to-tailwind-exp')
 const { deepClone } = require('./utils')
 
 const cssStyleRuleRegexp = /}?(.*?){(.*?)}/g
-const cssToClassMetadata = (css, sourceNodes, flag) => {
+
+const cssToClassMetadata = (css, sourceNodes, isInject) => {
   let expr = ''
   let rawCss = {}
   const res = {}
 
+  css = parseKeyframes(css)
   css = parseMediaQuery(css)
 
   css.replace(cssStyleRuleRegexp, (_, selector, cssText) => {
@@ -20,31 +23,7 @@ const cssToClassMetadata = (css, sourceNodes, flag) => {
       return
     }
 
-    if (flag) {
-      const classMetadata = {}
-      const specificity = spec.getSpecificity(selector)
-
-      cssText.replace(/(.*?):([^;]*);?/g, (_, prop, value) => {
-        styleToTailwind(
-          selector, prop, value, specificity, classMetadata, rawCss
-        )
-      })
-
-      const _classMetadata = deepClone(classMetadata)
-      const source = res[selector]
-
-      if (!source) {
-        res[selector] = _classMetadata
-      } else {
-        for (const key in _classMetadata) {
-          const value = _classMetadata[key]
-
-          if (!source[key] || source[key].specificity <= value.specificity) {
-            source[key] = value
-          }
-        }
-      }
-    } else {
+    if (isInject) {
       const nodes = filterNodes(sourceNodes, selector)
 
       if (nodes.length) {
@@ -75,10 +54,43 @@ const cssToClassMetadata = (css, sourceNodes, flag) => {
           }
         }
       }
+    } else {
+      const classMetadata = {}
+      const specificity = spec.getSpecificity(selector)
+
+      cssText.replace(/(.*?):([^;]*);?/g, (_, prop, value) => {
+        styleToTailwind(
+          selector, prop, value, specificity, classMetadata, rawCss
+        )
+      })
+
+      const _classMetadata = deepClone(classMetadata)
+      const source = res[selector]
+
+      if (!source) {
+        res[selector] = _classMetadata
+      } else {
+        for (const key in _classMetadata) {
+          const value = _classMetadata[key]
+
+          if (!source[key] || source[key].specificity <= value.specificity) {
+            source[key] = value
+          }
+        }
+      }
     }
   })
 
-  if (flag) {
+  if (isInject) {
+    for (let i = 0, l = sourceNodes.length; i < l; i++) {
+      const node = sourceNodes[i]
+      const { classMetadata, attrs } = node
+  
+      if (classMetadata) {
+        node.tailwindExp = classMetadataToTailwindExp(classMetadata, attrs.rawClass, isInject)
+      }
+    }
+  } else {
     const keys = Object.keys(res)
 
     for (let i = 0, l = keys.length; i < l; i++) {
@@ -86,19 +98,10 @@ const cssToClassMetadata = (css, sourceNodes, flag) => {
       const classMetadata = res[key]
 
       if (Object.keys(classMetadata).length ) {
-        let _expr = classMetadataToTailwindExp(classMetadata, key, flag)
+        let _expr = classMetadataToTailwindExp(classMetadata, key, isInject)
 
         res[key].tailwindExp = _expr
         expr += `${ _expr }\r\n`
-      }
-    }
-  } else {
-    for (let i = 0, l = sourceNodes.length; i < l; i++) {
-      const node = sourceNodes[i]
-      const { classMetadata, attrs } = node
-  
-      if (classMetadata) {
-        node.tailwindExp = classMetadataToTailwindExp(classMetadata, attrs.rawClass, flag)
       }
     }
   }

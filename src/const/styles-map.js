@@ -147,11 +147,11 @@ const stylesMap = {
     'content-box': 'box-content'
   },
   'white-space': {
-    normal: 'white-space-normal',
-    nowrap: 'white-space-nowrap',
-    pre: 'white-space-pre',
-    'pre-line': 'white-space-pre-line',
-    'pre-wrap': 'white-space-pre-wrap'
+    normal: 'whitespace-normal',
+    nowrap: 'whitespace-nowrap',
+    pre: 'whitespace-pre',
+    'pre-line': 'whitespace-pre-line',
+    'pre-wrap': 'whitespace-pre-wrap'
   },
   overflow: {
     auto: 'overflow-auto',

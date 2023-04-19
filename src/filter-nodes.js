@@ -122,9 +122,9 @@ const pseudoClassStrategies = {
     return nodes
   },
 
-  'link' (nodes) {
-    return nodes
-  },
+  // 'link' (nodes) {
+  //   return nodes
+  // },
 
   'visited' (nodes) {
     return nodes

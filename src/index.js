@@ -53,9 +53,11 @@ const importCss = ast => {
 const toTailwind = async (htmlInput, cssInput, output) => {
   const { html, css } = await purifier(htmlInput, cssInput)
   const { ast, nodes: sourceNodes } = HTML.parse(html)
-  const rawCss = cssToClassMetadata(css, sourceNodes)
+  const { rawCss, expr } = cssToClassMetadata(css, sourceNodes, false)
   
   importTailwind(ast) 
+
+  await writeFile('./target/_index.css', expr)
 
   if (Object.keys(rawCss)) {
     // handle unsupported properties

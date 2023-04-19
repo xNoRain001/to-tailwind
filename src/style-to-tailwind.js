@@ -65,7 +65,7 @@ const styleToTailwind = (
 
           if (content) {
             for (let i = 0, l = prefixs.length; i < l; i++) {
-              tailwindExp += `${ prefixs[i] }${ expOrMap }-['${ content }' `  
+              tailwindExp += `${ prefixs[i] }${ expOrMap }-['${ content }'] `  
             } 
           }
         } else if (expOrMap === 'transform') {
@@ -74,17 +74,17 @@ const styleToTailwind = (
               d = d.toLowerCase()
 
               for (let i = 0, l = prefixs.length; i < l; i++) {
-                tailwindExp += `${ prefixs[i] }${ p }-${ d }-[${ vx }]`
+                tailwindExp += `${ prefixs[i] }${ p }-${ d }-[${ vx }] `
               } 
             } else {
               for (let i = 0, l = prefixs.length; i < l; i++) {
-                tailwindExp += `${ prefixs[i] }${ p }-x-[${ vx }] ${ p }-y-[${ vx }]`
+                tailwindExp += `${ prefixs[i] }${ p }-x-[${ vx }] ${ p }-y-[${ vx }] `
               } 
             }
           })
         } else {
           for (let i = 0, l = prefixs.length; i < l; i++) {
-            tailwindExp += `${ prefixs[i] }${ expOrMap }-[${ value }]`
+            tailwindExp += `${ prefixs[i] }${ expOrMap }-[${ value }] `
           } 
         }
       }

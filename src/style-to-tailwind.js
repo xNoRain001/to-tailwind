@@ -8,13 +8,13 @@ const rawCssCollector = (rawCss, selector, prop, value) => {
 }
 
 const prefixParser = selector => {
-  let prefix = ''
+  let prefixs = []
 
-  selector.replace(/:([a-z]+)/, (_, $1) => {
-    prefix = `${ $1 }:`
+  selector.replace(/:([a-z]+)/g, (_, $1) => {
+    prefixs.push(`${ $1 }:`)
   })
   
-  return prefix
+  return prefixs.length ? prefixs : ['']
 }
 
 const styleToTailwind = (
@@ -29,14 +29,16 @@ const styleToTailwind = (
     const expOrMap = stylesMap[prop]
     const isStaticValue = typeof expOrMap === 'object'
     const key = isStaticValue ? prop : expOrMap
-    const prefix = prefixParser(selector)
+    const prefixs = prefixParser(selector)
     
     if (isStaticValue) {
       const keywordValue = expOrMap[value]
 
       if (keywordValue) {
-        // position: absolute; -> absolute  
-        tailwindExp += `${ prefix }${ expOrMap[value] } `  
+        // position: absolute; -> absolute 
+        for (let i = 0, l = prefixs.length; i < l; i++) {
+          tailwindExp += `${ prefixs[i] }${ expOrMap[value] } `  
+        } 
       } else {
         rawCssCollector(rawCss, selector, prop, value)
       }
@@ -62,19 +64,28 @@ const styleToTailwind = (
           const content = value.match(/['"](.*?)['"]/)[1]
 
           if (content) {
-            tailwindExp += `${ prefix }${ expOrMap }-['${ content }']`
+            for (let i = 0, l = prefixs.length; i < l; i++) {
+              tailwindExp += `${ prefixs[i] }${ expOrMap }-['${ content }' `  
+            } 
           }
         } else if (expOrMap === 'transform') {
           value.replace(/([a-z]+?)([A-Z]+)?\(([^,]+)(,.+)?\)/, (_, p, d = '', vx, vy) => {
             if (d) {
               d = d.toLowerCase()
-              tailwindExp += `${ prefix }${ p }-${ d }-[${ vx }]`
+
+              for (let i = 0, l = prefixs.length; i < l; i++) {
+                tailwindExp += `${ prefixs[i] }${ p }-${ d }-[${ vx }]`
+              } 
             } else {
-              tailwindExp += `${ prefix }${ p }-x-[${ vx }] ${ p }-y-[${ vx }]`
+              for (let i = 0, l = prefixs.length; i < l; i++) {
+                tailwindExp += `${ prefixs[i] }${ p }-x-[${ vx }] ${ p }-y-[${ vx }]`
+              } 
             }
           })
         } else {
-          tailwindExp += `${ prefix }${ expOrMap }-[${ value }]`
+          for (let i = 0, l = prefixs.length; i < l; i++) {
+            tailwindExp += `${ prefixs[i] }${ expOrMap }-[${ value }]`
+          } 
         }
       }
     }

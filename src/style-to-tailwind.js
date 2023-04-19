@@ -42,7 +42,6 @@ const styleToTailwind = (
       }
     } else {
       // width: 9999px; -> w-[9999px]
-      value = value.replace(/\s{2,}/, ' ')
       const res = shorthandParser(prop, value)
 
       if (res) {

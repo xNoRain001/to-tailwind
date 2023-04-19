@@ -6,7 +6,7 @@ const parseMediaQuery = require('./parse-media-query')
 const classMetadataToTailwindExp = require('./class-metadata-to-tailwind-exp')
 const { deepClone } = require('./utils')
 
-const cssStyleRuleRegexp = /}?\s*([\s\S]*?)\s*{\s*([\s\S]*?)\s*}/g
+const cssStyleRuleRegexp = /}?(.*?){(.*?)}/g
 const cssToClassMetadata = (css, sourceNodes) => {
   let rawCss = {}
   css = parseMediaQuery(css)
@@ -23,8 +23,7 @@ const cssToClassMetadata = (css, sourceNodes) => {
       const specificity = spec.getSpecificity(selector)
       const classMetadata = {}
 
-      // TODO: why /\s*(.*?)\s*:\s*(.*?);?/g doesn't work ?
-      cssText.replace(/\s*(.*?)\s*:\s*([^;]*);?/g, (_, prop, value) => {
+      cssText.replace(/(.*?):([^;]*);?/g, (_, prop, value) => {
         styleToTailwind(
           selector, prop, value, specificity, classMetadata, rawCss
         )

@@ -43,10 +43,10 @@ const stylesMap = {
   'border-left': 'shorthand-border-left',
   color: 'text',
   'font-size': 'text',
-  // 'font-family': 'font',
   'background-color': 'bg',
   'min-width': 'min-w',
   'min-height': 'min-h',
+  'letter-spacing': 'tracking',
   'flex': 'shorthand-flex',
   'flex-grow': 'grow',
   'flex-shrink': 'shrink',
@@ -54,6 +54,7 @@ const stylesMap = {
   'background': 'shorthand-background',
   'animation': 'shorthand-animation',
   'animation-duration': 'duration',
+  'animation-delay': 'delay',
   'animation-name': 'animate',
   'transition': 'shorthand-transition',
   'transition-duration': 'duration',
@@ -61,9 +62,8 @@ const stylesMap = {
   'font': 'shorthand-font',
   'line-height': 'leading',
   'z-index': 'z',
-  'list-style-image': 'list-image',
   'list-style': 'shorthand-list-style',
-  // 'background-image': 'bg',
+  'background-image': 'bg',
   'content': 'content',
   'transform': 'transform',
   'font-weight': {
@@ -249,6 +249,9 @@ const stylesMap = {
   'list-style-position': {
     inside: 'list-inside',
     outside: 'list-outside'
+  },
+  'list-style-image': {
+    none: 'list-image-none'
   },
   'font-style': {
     italic: 'italic',

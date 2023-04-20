@@ -19,8 +19,11 @@ const styleToTailwind = (
   selector, prop, value, specificity, classMetadata, rawCss
 ) => {
   if (stylesMap[prop]) {
-    if (value.startsWith('url("data:image')) {
+    if (value.includes('data:')) {
       value = value.replace(/my-semicolon/g, ';')
+      rawCssCollector(rawCss, selector, prop, value)
+      
+      return
     }
 
     let tailwindExp = ''

@@ -16,10 +16,13 @@ const purifier = async (htmlInput, cssInput) => {
     .replace(/\s\)/, ')')
     .trim()
 
-  // replace base64's ;
+  // replace ;
   css = css.replace(/url\(['"](.*?)['"]\)/g, (_, $1) => {
     return `url("${ $1.replace(/;/g, 'my-semicolon') }")`
   })
+  // css = css.replace(/url\((['"]?)(data:.*?)['"]?\)/g, (_, $1, $2) => {
+  //   return `url(${ $1 }${ $2.replace(/;/g, 'my-semicolon') }${ $1 })`
+  // })
 
   return {
     html,

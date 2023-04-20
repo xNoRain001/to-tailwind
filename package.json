@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "commander": "^10.0.0",
-    "css-shorthand-parser": "0.3.4",
+    "css-shorthand-parser": "0.3.6",
     "selector-specificity": "0.2.3"
   }
 }

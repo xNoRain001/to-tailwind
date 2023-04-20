@@ -35,7 +35,7 @@ npm install -g to-tailwind
 Run
 
 ```
-to-tailwind --html ./your-directory/test/index.html --css ./your-directory/test/index.css --output ./your-directory/target
+to-tailwind --html ./test/index.html --css ./test/index.css --output ./target
 ```
 
 Output file
@@ -57,7 +57,7 @@ because javascript code may be use these class name.
 Run
 
 ```
-to-tailwind --html ./your-directory/test/index.html --css ./your-directory/test/index.css --output ./your-directory/target --inject true
+to-tailwind --html ./test/index.html --css ./test/index.css --output ./target --inject true
 ```
 
 ```html

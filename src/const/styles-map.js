@@ -46,6 +46,7 @@ const stylesMap = {
   'font-family': 'font',
   'background-color': 'bg',
   'min-width': 'min-w',
+  'min-height': 'min-h',
   'flex': 'shorthand-flex',
   'flex-grow': 'flex-grow',
   'flex-shrink': 'flex-shrink',

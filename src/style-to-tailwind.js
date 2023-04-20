@@ -90,6 +90,8 @@ const styleToTailwind = (
       }
     }
 
+    tailwindExp = tailwindExp.slice(0, -1)
+
     classMetadata[key] = {
       tailwindExp,
       specificity

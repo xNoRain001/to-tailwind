@@ -11,12 +11,12 @@ const config = {
 
   output: {
     option: '--output <v>',
-    descriptor: 'output'
+    descriptor: 'output directory'
   },
 
   inject: {
     option: '--inject <v>',
-    descriptor: 'is inject tailwind expressions to html'
+    descriptor: 'inject tailwind expressions to html'
   }
 }
 

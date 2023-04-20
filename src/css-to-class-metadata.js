@@ -101,7 +101,7 @@ const cssToClassMetadata = (css, sourceNodes, isInject) => {
         let _expr = classMetadataToTailwindExp(classMetadata, key, isInject)
 
         res[key].tailwindExp = _expr
-        expr += `${ _expr }\r\n`
+        expr += `${ _expr }`
       }
     }
   }

@@ -4,7 +4,7 @@ const fallback = async (rawCss, output) => {
   let cssText = ''
 
   for (const selector in rawCss) {
-    cssText += `${ selector } {`
+    cssText += `${ selector } {\r\n`
     const rules = rawCss[selector]
 
     for (const prop in rules) {
@@ -13,10 +13,10 @@ const fallback = async (rawCss, output) => {
       value = value.startsWith('url("data:image')
         ? value.replace(/my-semicolon/, ';')
         : value
-      cssText += `${ prop }: ${ value };`
+      cssText += `\t${ prop }: ${ value };`
     }
 
-    cssText += '}\r\n'
+    cssText += '\r\n}\r\n\r\n'
   }
 
   await(writeFile(`${ output }/raw-css.css`, cssText))

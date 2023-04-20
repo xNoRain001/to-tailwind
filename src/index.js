@@ -55,17 +55,16 @@ const toTailwind = async (htmlInput, cssInput, output, isInject = false) => {
   const { ast, nodes: sourceNodes } = HTML.parse(html)
   const { rawCss, expr } = cssToClassMetadata(css, sourceNodes, isInject)
   
-  await writeFile('./target/_index.css', expr)
+  await writeFile('./target/index.css', expr)
+
+  if (Object.keys(rawCss)) {
+    // handle unsupported properties
+    await fallback(rawCss)
+    importCss(ast)
+  }
 
   if (isInject) {
     importTailwind(ast) 
-
-    if (Object.keys(rawCss)) {
-      // handle unsupported properties
-      await fallback(rawCss)
-      importCss(ast)
-    }
-
     const res = HTML.stringify(ast)
     await writeFile(output, res)
   }

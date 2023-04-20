@@ -19,7 +19,7 @@ const fallback = async rawCss => {
     cssText += '}\r\n'
   }
 
-  await(writeFile('./target/index.css', cssText))
+  await(writeFile('./target/raw-css.css', cssText))
 }
 
 module.exports = fallback

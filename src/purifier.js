@@ -11,7 +11,9 @@ const purifier = async (htmlInput, cssInput) => {
   // remove unnecessary white space
   css = css
     .replace(/\s{2,}/g, ' ')
-    .replace(/\s?([{}(),:;])\s?/g, (_, $1) => $1)
+    .replace(/\s?([{},:;])\s?/g, (_, $1) => $1)
+    .replace(/\(\s/, '(')
+    .replace(/\s\)/, ')')
     .trim()
 
   // replace base64's ;

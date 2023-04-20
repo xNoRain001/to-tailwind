@@ -1,6 +1,6 @@
 const { writeFile } = require('fs').promises
 
-const fallback = async rawCss => {
+const fallback = async (rawCss, output) => {
   let cssText = ''
 
   for (const selector in rawCss) {
@@ -19,7 +19,7 @@ const fallback = async rawCss => {
     cssText += '}\r\n'
   }
 
-  await(writeFile('./target/raw-css.css', cssText))
+  await(writeFile(`${ output }/raw-css.css`, cssText))
 }
 
 module.exports = fallback

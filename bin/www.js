@@ -12,7 +12,7 @@ Object.values(config).forEach(({ option, descriptor }) => {
   program.option(option, descriptor)
 })
 
-const { css, html, output } = program.parse()._optionValues
+const { css, html, output, inject = false } = program.parse()._optionValues
 
 if (!html) {
   console.log('error: html input missing!')
@@ -37,4 +37,4 @@ const htmlInput = resolve(cwd, html)
 const cssInput = resolve(cwd, css)
 const _output = resolve(cwd, output)
 
-toTailwind(htmlInput, cssInput, _output)
+toTailwind(htmlInput, cssInput, _output, inject)

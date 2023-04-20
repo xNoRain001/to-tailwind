@@ -69,3 +69,7 @@ to-tailwind --html ./test/index.html --css ./test/index.css --output ./target --
   </ul>
 </body>
 ```
+
+## License
+
+MIT

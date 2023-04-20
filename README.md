@@ -42,8 +42,13 @@ Output file
 
 ```css
 /* ./target/index.css */
-.list > .list-item { @apply text-[red]  }
-.list > .list-item:last-of-type { @apply last:text-[green] }
+.list > .list-item { 
+  @apply text-[red]
+}
+
+.list > .list-item:last-of-type {
+  @apply last:text-[green]
+}
 ```
 
 Or inject tailwind expressions to HTML, original class name will be retained 
@@ -59,8 +64,8 @@ to-tailwind --html ./your-directory/test/index.html --css ./your-directory/test/
 <!-- ./target/index.html -->
 <body>
   <ul>
-    <li class="text-[red]  list-item">foo</li>
-    <li class="last:text-[green]  list-item">bar</li>
+    <li class="text-[red] list-item">foo</li>
+    <li class="last:text-[green] list-item">bar</li>
   </ul>
 </body>
 ```

@@ -10,9 +10,7 @@ const rawCssCollector = (rawCss, selector, prop, value) => {
 const prefixParser = selector => {
   let prefixs = []
 
-  selector.replace(/:([a-z]+)/g, (_, $1) => {
-    prefixs.push(`${ $1 }:`)
-  })
+  selector.replace(/:([a-z]+)/g, (_, $1) => prefixs.push(`${ $1 }:`))
   
   return prefixs.length ? prefixs : ['']
 }

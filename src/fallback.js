@@ -4,7 +4,7 @@ const fallback = async (rawCss, output) => {
   let cssText = ''
 
   for (const selector in rawCss) {
-    cssText += `${ selector } {\r\n`
+    cssText += `${ selector } {`
     const rules = rawCss[selector]
 
     for (const prop in rules) {
@@ -13,7 +13,7 @@ const fallback = async (rawCss, output) => {
       value = value.startsWith('url("data:image')
         ? value.replace(/my-semicolon/, ';')
         : value
-      cssText += `\t${ prop }: ${ value };`
+      cssText += `\r\n\t${ prop }: ${ value };`
     }
 
     cssText += '\r\n}\r\n\r\n'

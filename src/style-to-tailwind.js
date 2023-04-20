@@ -76,7 +76,7 @@ const styleToTailwind = (
               } 
             } else {
               for (let i = 0, l = prefixs.length; i < l; i++) {
-                tailwindExp += `${ prefixs[i] }${ p }-x-[${ vx }] ${ p }-y-[${ vx }] `
+                tailwindExp += `${ prefixs[i] }${ p }-x-[${ vx }] ${ prefixs[i] }${ p }-y-[${ vx }] `
               } 
             }
           })

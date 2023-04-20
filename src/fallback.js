@@ -8,6 +8,7 @@ const fallback = async (rawCss, output) => {
     const rules = rawCss[selector]
 
     for (const prop in rules) {
+      console.log(prop)
       let value = rules[prop]
 
       value = value.startsWith('url("data:image')

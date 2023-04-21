@@ -7,7 +7,7 @@ const rawCssCollector = (rawCss, selector, prop, value) => {
   rawCss[selector][prop] = value 
 }
 
-const prefixParser = (rawCss, selector, prop, value) => {
+const pseudoPrefixParser = (rawCss, selector, prop, value) => {
   const prefixs = []
   const segments = selector.split(',')
 
@@ -26,10 +26,33 @@ const prefixParser = (rawCss, selector, prop, value) => {
   return prefixs.length ? prefixs : ['']
 }
 
+const strategies = {
+  translateX (exprPrefix, value, pseudoPrefixs) {
+    let tailwindExp = ''
+    const negativePrefix = value.startsWith('-') ? '-' : ''
+
+    for (let i = 0, l = pseudoPrefixs.length; i < l; i++) {
+      tailwindExp += `${ pseudoPrefixs[i] }${ negativePrefix }${ exprPrefix }-[${ [value] }] `  
+    } 
+
+    return tailwindExp
+  }
+}
+
+strategies.translateY = 
+strategies.scaleX = 
+strategies.scaleY = strategies.translateX
+
 const styleToTailwind = (
   selector, prop, value, specificity, classMetadata, rawCss
 ) => {
-  if (stylesMap[prop]) {
+  // shorthand parser convert `transform: translate(50%); ` to
+  // `{ translateX: 50%, translateY: 50% }`, styles map don't support
+  // `translate[X|Y]?`, but support transform: `translate[X|Y]?`
+  const strategy = strategies[prop]
+  const exprOrKeywordValues = stylesMap[prop]
+
+  if (exprOrKeywordValues || strategy) {
     if (value.includes('data:')) {
       value = value.replace(/my-semicolon/g, ';')
       rawCssCollector(rawCss, selector, prop, value)
@@ -38,25 +61,25 @@ const styleToTailwind = (
     }
 
     let tailwindExp = ''
-    const expOrMap = stylesMap[prop]
-    const isStaticValue = typeof expOrMap === 'object'
-    const key = isStaticValue ? prop : expOrMap
-    const prefixs = prefixParser(rawCss, selector, prop, value)
+    const exprOrKeywordValues = stylesMap[prop]
+    const isKeywordValues = typeof exprOrKeywordValues === 'object'
+    const key = isKeywordValues ? prop : exprOrKeywordValues
+    const pseudoPrefixs = pseudoPrefixParser(rawCss, selector, prop, value)
     
-    if (isStaticValue) {
-      const keywordValue = expOrMap[value]
+    if (isKeywordValues) {
+      const keywordValue = exprOrKeywordValues[value]
 
       if (keywordValue) {
         // position: absolute; -> absolute 
-        for (let i = 0, l = prefixs.length; i < l; i++) {
-          tailwindExp += `${ prefixs[i] }${ expOrMap[value] } `  
+        for (let i = 0, l = pseudoPrefixs.length; i < l; i++) {
+          tailwindExp += `${ pseudoPrefixs[i] }${ exprOrKeywordValues[value] } `  
         } 
       } else {
         rawCssCollector(rawCss, selector, prop, value)
       }
     } else {
-      // width: 9999px; -> w-[9999px]
-      const res = shorthandParser(prop, value)
+      // try parse shorthand property
+      const res = shorthandParser(prop, value) 
 
       if (res) {
         const props = Object.keys(res)
@@ -64,7 +87,7 @@ const styleToTailwind = (
         for (let i = 0, l = props.length; i < l; i++) {
           const prop = props[i]
           const value = res[prop]
-
+          
           if (value !== 'unset') {
             styleToTailwind(
               selector, prop, value, specificity, classMetadata, rawCss
@@ -72,32 +95,29 @@ const styleToTailwind = (
           }
         }
       } else {
-        if (expOrMap === 'content') {
-          const content = value.match(/['"](.*?)['"]/)[1]
+        if (strategy) {
+          const exprPrefix1 = prop.match(/[a-z]+/)[0] // translate
+          const exprPrefix2 = prop.match(/[A-Z]+/)[0].toLowerCase() // X
+          const exprPrefix = `${ exprPrefix1 }-${ exprPrefix2 }` // translate-X
 
-          if (content) {
-            for (let i = 0, l = prefixs.length; i < l; i++) {
-              tailwindExp += `${ prefixs[i] }${ expOrMap }-['${ content }'] `  
+          tailwindExp += strategy(exprPrefix, value, pseudoPrefixs)
+        } else {
+          if (prop === 'content') {
+            for (let i = 0, l = pseudoPrefixs.length; i < l; i++) {
+              const content = value.match(/['"](.*?)['"]/)[1]
+  
+              if (content) {
+                for (let i = 0, l = pseudoPrefixs.length; i < l; i++) {
+                  tailwindExp += `${ pseudoPrefixs[i] }content-['${ content }'] `  
+                } 
+              }
+            } 
+          } else {
+            // width: 9999px; -> w-[9999px]
+            for (let i = 0, l = pseudoPrefixs.length; i < l; i++) {
+              tailwindExp += `${ pseudoPrefixs[i] }${ exprOrKeywordValues }-[${ value }] `
             } 
           }
-        } else if (expOrMap === 'transform') {
-          value.replace(/([a-z]+?)([A-Z]+)?\(([^,]+)(,.+)?\)/, (_, p, d = '', vx, vy) => {
-            if (d) {
-              d = d.toLowerCase()
-
-              for (let i = 0, l = prefixs.length; i < l; i++) {
-                tailwindExp += `${ prefixs[i] }${ p }-${ d }-[${ vx }] `
-              } 
-            } else {
-              for (let i = 0, l = prefixs.length; i < l; i++) {
-                tailwindExp += `${ prefixs[i] }${ p }-x-[${ vx }] ${ prefixs[i] }${ p }-y-[${ vx }] `
-              } 
-            }
-          })
-        } else {
-          for (let i = 0, l = prefixs.length; i < l; i++) {
-            tailwindExp += `${ prefixs[i] }${ expOrMap }-[${ value }] `
-          } 
         }
       }
     }

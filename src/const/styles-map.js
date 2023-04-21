@@ -65,7 +65,7 @@ const stylesMap = {
   'list-style': 'shorthand-list-style',
   'background-image': 'bg',
   'content': 'content',
-  'transform': 'transform',
+  'transform': 'shorthand-transform',
   'font-weight': {
     100: 'font-thin',
     200: 'font-extra-light',

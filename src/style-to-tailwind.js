@@ -29,7 +29,12 @@ const pseudoPrefixParser = (rawCss, selector, prop, value) => {
 const strategies = {
   translateX (exprPrefix, value, pseudoPrefixs) {
     let tailwindExp = ''
-    const negativePrefix = value.startsWith('-') ? '-' : ''
+    let negativePrefix = ''
+
+    if (value.startsWith('-')) {
+      value = value.slice(1)
+      negativePrefix = '-'
+    }
 
     for (let i = 0, l = pseudoPrefixs.length; i < l; i++) {
       tailwindExp += `${ pseudoPrefixs[i] }${ negativePrefix }${ exprPrefix }-[${ [value] }] `  
@@ -63,7 +68,6 @@ const styleToTailwind = (
     let tailwindExp = ''
     const exprOrKeywordValues = stylesMap[prop]
     const isKeywordValues = typeof exprOrKeywordValues === 'object'
-    const key = isKeywordValues ? prop : exprOrKeywordValues
     const pseudoPrefixs = pseudoPrefixParser(rawCss, selector, prop, value)
     
     if (isKeywordValues) {
@@ -124,7 +128,7 @@ const styleToTailwind = (
 
     tailwindExp = tailwindExp.slice(0, -1)
 
-    classMetadata[key] = {
+    classMetadata[prop] = {
       tailwindExp,
       specificity
     }

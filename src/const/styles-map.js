@@ -65,7 +65,8 @@ const stylesMap = {
   'list-style': 'shorthand-list-style',
   'background-image': 'bg',
   'content': 'content',
-  'transform': 'shorthand-transform',
+  // 'transform': 'shorthand-transform',
+  'list-style-image': 'list-image',
   'font-weight': {
     100: 'font-thin',
     200: 'font-extra-light',
@@ -249,10 +250,7 @@ const stylesMap = {
   'list-style-position': {
     inside: 'list-inside',
     outside: 'list-outside'
-  },
-  'list-style-image': {
-    none: 'list-image-none'
-  },
+  }, 
   'font-style': {
     italic: 'italic',
     normal: 'not-italic'

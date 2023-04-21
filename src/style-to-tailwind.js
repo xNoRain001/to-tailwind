@@ -1,16 +1,27 @@
 const shorthandParser = require('css-shorthand-parser')
 
-const { stylesMap } = require("./const")
+const { stylesMap, unsupportedPseudoClasses } = require("./const")
 
 const rawCssCollector = (rawCss, selector, prop, value) => {
   rawCss[selector] = rawCss[selector] || {}
   rawCss[selector][prop] = value 
 }
 
-const prefixParser = selector => {
-  let prefixs = []
+const prefixParser = (rawCss, selector, prop, value) => {
+  const prefixs = []
+  const segments = selector.split(',')
 
-  selector.replace(/:([a-z]+)/g, (_, $1) => prefixs.push(`${ $1 }:`))
+  for (let i = 0, l = segments.length; i < l; i++) {
+    const segment = segments[i]
+
+    segment.replace(/:([a-z]+)/g, (_, pseudoClass) => {
+      if (unsupportedPseudoClasses.hasOwnProperty(pseudoClass)) {
+        rawCssCollector(rawCss, segment, prop, value)
+      } else {
+        prefixs.push(`${ pseudoClass }:`)
+      }
+    })
+  }
   
   return prefixs.length ? prefixs : ['']
 }
@@ -30,7 +41,7 @@ const styleToTailwind = (
     const expOrMap = stylesMap[prop]
     const isStaticValue = typeof expOrMap === 'object'
     const key = isStaticValue ? prop : expOrMap
-    const prefixs = prefixParser(selector)
+    const prefixs = prefixParser(rawCss, selector, prop, value)
     
     if (isStaticValue) {
       const keywordValue = expOrMap[value]

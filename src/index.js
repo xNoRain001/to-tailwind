@@ -1,6 +1,6 @@
+const HTML = require('i-html-parser')
 const { writeFile } = require('fs').promises
 
-const HTML = require('./html-parser')
 const purifier = require('./purifier')
 const fallback = require('./fallback')
 const cssToClassMetadata = require('./css-to-class-metadata')

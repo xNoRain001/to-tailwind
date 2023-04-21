@@ -15,5 +15,5 @@ export default {
     terser(),
     resolve()
   ],
-  external: ['selector-specificity', 'css-shorthand-parser']
+  external: ['selector-specificity', 'css-shorthand-parser', 'i-html-parser']
 }

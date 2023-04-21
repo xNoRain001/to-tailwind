@@ -1,11 +1,10 @@
 const spec = require('selector-specificity')
 
 const filterNodes = require('./filter-nodes')
-const parseKeyframes = require('./parse-keyframes')
 const styleToTailwind = require('./style-to-tailwind')
-const parseMediaQuery = require('./parse-media-query')
 const classMetadataToTailwindExp = require('./class-metadata-to-tailwind-exp')
 const { deepClone } = require('./utils')
+const { parseKeyframes, parseMediaQuery } = require('./parser')
 
 const cssStyleRuleRegexp = /}?(.*?){(.*?)}/g
 

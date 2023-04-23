@@ -15,14 +15,16 @@ const purifier = async (htmlInput, cssInput) => {
     .replace(/\(\s/, '(')
     .replace(/\s\)/, ')')
     .trim()
+  
+  // .foo{color:red} -> .foo{color:red;}
+  css = css.replace(/([^;])}/g, (_, $1) => `${ $1 };}`)
 
-  // replace ;
-  css = css.replace(/url\(['"](.*?)['"]\)/g, (_, $1) => {
-    return `url("${ $1.replace(/;/g, 'my-semicolon') }")`
+  // replace base64's semicolon
+  // background-image: url(data:...);
+  // background: url(data...) no-repeat ...;
+  css = css.replace(/data:(.*?)\)([\s;])/g, (_, $1, $2) => {
+    return `data:${ $1.replace(/;/g, 'my-semicolon') })${ $2 }`
   })
-  // css = css.replace(/url\((['"]?)(data:.*?)['"]?\)/g, (_, $1, $2) => {
-  //   return `url(${ $1 }${ $2.replace(/;/g, 'my-semicolon') }${ $1 })`
-  // })
 
   return {
     html,

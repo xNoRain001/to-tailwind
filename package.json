@@ -1,6 +1,6 @@
 {
   "name": "to-tailwind",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Style or class convert to tailwind.",
   "keywords": [
     "to-tailwind",
@@ -18,6 +18,7 @@
   "bin": {
     "to-tailwind": "./bin/www.js"
   },
+  "main": "./dist/to-tailwind.min.js",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.21.4",

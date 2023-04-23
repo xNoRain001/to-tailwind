@@ -12,8 +12,8 @@ const purifier = async (htmlInput, cssInput) => {
   css = css
     .replace(/\s{2,}/g, ' ')
     .replace(/\s?([{},:;])\s?/g, (_, $1) => $1)
-    .replace(/\(\s/, '(')
-    .replace(/\s\)/, ')')
+    .replace(/\(\s/g, '(')
+    .replace(/\s([()])/g, (_, $1) => $1)
     .trim()
   
   // .foo{color:red} -> .foo{color:red;}

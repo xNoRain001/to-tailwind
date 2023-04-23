@@ -1,7 +1,5 @@
-const classMetadataToTailwindExp = (classMetadata, rawClass, isInject) => {
-  let tailwindExp = rawClass 
-    ? `${ rawClass }${ isInject ? '' : ' {\r\n\t@apply' } ` 
-    : ''
+const classMetadataToTailwindExp = (classMetadata, selector, isInject) => {
+  let tailwindExp =  `${ selector }${ isInject ? '' : ' {\r\n\t@apply' } ` 
   let helper = ''
   
   for (const key in classMetadata) {
@@ -10,7 +8,7 @@ const classMetadataToTailwindExp = (classMetadata, rawClass, isInject) => {
 
   // empty expr
   if (helper === ' ') {
-    return
+    return ''
   } 
 
   tailwindExp += helper

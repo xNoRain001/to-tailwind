@@ -90,16 +90,16 @@ const cssToClassMetadata = (css, sourceNodes, isInject) => {
       }
     }
   } else {
-    const keys = Object.keys(res)
+    const selectors = Object.keys(res)
 
-    for (let i = 0, l = keys.length; i < l; i++) {
-      const key = keys[i]
-      const classMetadata = res[key]
+    for (let i = 0, l = selectors.length; i < l; i++) {
+      const selector = selectors[i]
+      const classMetadata = res[selector]
 
       if (Object.keys(classMetadata).length ) {
-        let _expr = classMetadataToTailwindExp(classMetadata, key, isInject)
+        let _expr = classMetadataToTailwindExp(classMetadata, selector, isInject)
 
-        res[key].tailwindExp = _expr
+        res[selector].tailwindExp = _expr
         expr += `${ _expr }`
       }
     }

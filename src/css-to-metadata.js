@@ -5,10 +5,16 @@ const filterNodes = require('./filter-nodes')
 const { deepClone } = require('./utils')
 const { stylesMap, supportedPseudoClasses } = require("./const")
 
-const rawCssCollector = (mediaPrefix, rawCss, selector, prop, value) => {
-  // '342:.download__dialog': { transform: 'translateY(-50%)' }
-  rawCss[mediaPrefix + selector] = rawCss[mediaPrefix + selector] || {}
-  rawCss[mediaPrefix + selector][prop] = value 
+const rawCssCollector = (rawMediaPrefix, rawCss, selector, prop, value) => {
+  // '@media (max-width: 342px).download__dialog': { transform: 'translateY(-50%)' }
+  if (rawMediaPrefix) {
+    rawCss[rawMediaPrefix] = rawCss[rawMediaPrefix] || {}
+    rawCss[rawMediaPrefix][selector] = rawCss[rawMediaPrefix][selector] || {}
+    rawCss[rawMediaPrefix][selector][prop] = value
+  } else {
+    rawCss[selector] = rawCss[selector] || {}
+    rawCss[selector][prop] = value 
+  }
 }
 
 const pseudoPrefixParser = selector => {
@@ -19,16 +25,11 @@ const pseudoPrefixParser = selector => {
     const segment = segments[i]
 
     segment.replace(/:([a-z-]+)(\((.*?)\))?/g, (_, pseudoClass, v) => {
-      // if (supportedPseudoClasses.hasOwnProperty(pseudoClass)) {
-        prefixs.push({
-          pseudoClass,
-          pseudoClassPrefix: `${ pseudoClass }:`,
-          selector: segment
-        })
-      // } 
-      // else {
-      //   rawCssCollector(mediaPrefix, rawCss, segment, prop, value)
-      // }
+      prefixs.push({
+        pseudoClass,
+        pseudoClassPrefix: `${ pseudoClass }:`,
+        selector: segment
+      })
     })
   }
   
@@ -55,7 +56,7 @@ const strategies = {
       if (supportedPseudoClasses.hasOwnProperty(pseudoClass) || pseudoClass === '' ) {
         tailwindExp += `${ mediaPrefix }${ pseudoClassPrefix }${ negativePrefix }${ exprPrefix }-[${ [value] }] `  
       } else {
-        rawCssCollector(mediaPrefix, rawCss, selector, prop, value)
+        rawCssCollector(rawMediaPrefix, rawCss, selector, prop, value)
       }
     } 
 
@@ -68,7 +69,7 @@ strategies.scaleX =
 strategies.scaleY = strategies.translateX
 
 const styleToTailwind = (
-  selector, prop, value, specificity, classMetadata, rawCss, mediaPrefix
+  selector, prop, value, specificity, classMetadata, rawCss, mediaPrefix, rawMediaPrefix
 ) => {
   // shorthand parser convert `transform: translate(50%); ` to
   // `{ translateX: 50%, translateY: 50% }`, styles map don't support
@@ -79,7 +80,7 @@ const styleToTailwind = (
   if (exprOrKeywordValues || strategy) {
     if (value.includes('data:')) {
       value = value.replace(/my-semicolon/g, ';')
-      rawCssCollector(mediaPrefix, rawCss, selector, prop, value)
+      rawCssCollector(rawMediaPrefix, rawCss, selector, prop, value)
       
       return
     }
@@ -100,11 +101,11 @@ const styleToTailwind = (
           if (supportedPseudoClasses.hasOwnProperty(pseudoClass) || pseudoClass === '' ) {
             tailwindExp += `${ mediaPrefix }${ pseudoClassPrefix }${ exprOrKeywordValues[value] } `  
           } else {
-            rawCssCollector(mediaPrefix, rawCss, selector, prop, value)
+            rawCssCollector(rawMediaPrefix, rawCss, selector, prop, value)
           }
         } 
       } else {
-        rawCssCollector(mediaPrefix, rawCss, selector, prop, value)
+        rawCssCollector(rawMediaPrefix, rawCss, selector, prop, value)
       }
     } else {
       // try parse shorthand property
@@ -119,7 +120,7 @@ const styleToTailwind = (
           
           if (value !== 'unset') {
             styleToTailwind(
-              selector, prop, value, specificity, classMetadata, rawCss, mediaPrefix
+              selector, prop, value, specificity, classMetadata, rawCss, mediaPrefix, rawMediaPrefix
             )
           }
         }
@@ -142,7 +143,7 @@ const styleToTailwind = (
                   if (supportedPseudoClasses.hasOwnProperty(pseudoClass) || pseudoClass === '' ) {
                     tailwindExp += `${ mediaPrefix }${ pseudoClassPrefix }content-['${ content }'] `  
                   } else {
-                    rawCssCollector(mediaPrefix, rawCss, selector, prop, value)
+                    rawCssCollector(rawMediaPrefix, rawCss, selector, prop, value)
                   }
                 } 
               }
@@ -156,7 +157,7 @@ const styleToTailwind = (
               if (supportedPseudoClasses.hasOwnProperty(pseudoClass) || pseudoClass === '' ) {
                 tailwindExp += `${ mediaPrefix }${ pseudoClassPrefix }${ exprOrKeywordValues }-[${ value }] `
               } else {
-                rawCssCollector(mediaPrefix, rawCss, selector, prop, value)
+                rawCssCollector(rawMediaPrefix, rawCss, selector, prop, value)
               }
             } 
             
@@ -171,14 +172,14 @@ const styleToTailwind = (
       specificity
     }
   } else {
-    rawCssCollector(mediaPrefix, rawCss, selector, prop, value)
+    rawCssCollector(rawMediaPrefix, rawCss, selector, prop, value)
   }
 }
 
 const cssStyleRuleRegexp = /}?(.*?){(.*?)}/g
 
 const cssToMetadata = (
-  mediaPrefix = '', css, sourceNodes, isInject, rawCss, classMetadataList
+  rawMediaPrefix, mediaPrefix, css, sourceNodes, isInject, rawCss, classMetadataList
 ) => {
   css.replace(cssStyleRuleRegexp, (_, selector, cssText) => {
     // empty rule -> .foo {}
@@ -195,7 +196,7 @@ const cssToMetadata = (
 
         cssText.replace(/(.*?):([^;]*);?/g, (_, prop, value) => {
           styleToTailwind(
-            selector, prop, value, specificity, classMetadata, rawCss, mediaPrefix
+            selector, prop, value, specificity, classMetadata, rawCss, mediaPrefix, rawMediaPrefix
           )
         })
 
@@ -223,7 +224,7 @@ const cssToMetadata = (
 
       cssText.replace(/(.*?):([^;]*);?/g, (_, prop, value) => {
         styleToTailwind(
-          selector, prop, value, specificity, classMetadata, rawCss, mediaPrefix
+          selector, prop, value, specificity, classMetadata, rawCss, mediaPrefix, rawMediaPrefix
         )
       })
 

@@ -60,7 +60,7 @@ const toTailwind = async (htmlInput, cssInput, output, isInject = false) => {
 
   css = parseKeyframes(css)
   css = parseMediaQuery(rawCss, classMetadataList, css, sourceNodes, isInject)
-  cssToMetadata('', css, sourceNodes, isInject, rawCss, classMetadataList)
+  cssToMetadata('', '', css, sourceNodes, isInject, rawCss, classMetadataList)
   
   if (isInject) {
     importTailwind(ast) 

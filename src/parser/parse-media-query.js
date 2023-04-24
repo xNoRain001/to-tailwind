@@ -13,7 +13,8 @@ const parseMediaQuery = (rawCss, classMetadataList, css, sourceNode, isInject) =
   css = css.replace(regexp, (_, p, v, cssText) => {
     breakPoints[p].push(({ 
       size: parseInt(v),
-      cssText: `${ cssText }}` 
+      cssText: `${ cssText }}`,
+      rawMediaPrefix: `@media (${ p }: ${ v })`
     }))
 
     return ''
@@ -34,8 +35,8 @@ const parseMediaQuery = (rawCss, classMetadataList, css, sourceNode, isInject) =
   const maxWidthList = breakPoints['max-width']
 
   for (let i = 0, l = maxWidthList.length; i < l; i++) {
-    const { size, cssText } = maxWidthList[i]
-    cssToMetadata(`${ size }:`, cssText, sourceNode, isInject, rawCss, classMetadataList)
+    const { size, cssText, rawMediaPrefix } = maxWidthList[i]
+    cssToMetadata(rawMediaPrefix, `${ size }:`, cssText, sourceNode, isInject, rawCss, classMetadataList)
   }
 
   return css

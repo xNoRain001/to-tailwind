@@ -1,7 +1,7 @@
 const stylesMap = require('./styles-map')
-const unsupportedPseudoClasses = require('./unsupported-pseudo-class')
+const supportedPseudoClasses = require('./supported-pseudo-class')
 
 module.exports = { 
   stylesMap,
-  unsupportedPseudoClasses
+  supportedPseudoClasses
 }

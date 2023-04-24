@@ -1,6 +1,6 @@
 const cssToMetadata = require("../css-to-metadata")
 
-const regexp = /@media\((.*?):(.*?)\){((?:(?!}}).)+)/g
+const regexp = /@media\((.*?):(.*?)\){((?:(?!}}).)+)}/g
 
 const parseMediaQuery = (rawCss, classMetadataList, css, sourceNode, isInject) => {
   const breakPoints = {

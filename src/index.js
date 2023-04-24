@@ -3,7 +3,9 @@ const { writeFile } = require('fs').promises
 
 const purifier = require('./purifier')
 const fallback = require('./fallback')
-const cssToClassMetadata = require('./css-to-class-metadata')
+const cssToMetadata = require('./css-to-metadata')
+const metadataToExpr = require('./metadata-to-expr')
+const { parseKeyframes, parseMediaQuery } = require('./parser')
 
 const strategies = {
   // @layer base
@@ -51,15 +53,21 @@ const importCss = ast => {
 }
 
 const toTailwind = async (htmlInput, cssInput, output, isInject = false) => {
-  const { html, css } = await purifier(htmlInput, cssInput)
+  let { html, css } = await purifier(htmlInput, cssInput)
   const { ast, nodes: sourceNodes } = HTML.parse(html)
-  const { rawCss, expr } = cssToClassMetadata(css, sourceNodes, isInject)
+  const rawCss = {}
+  const classMetadataList = {}
+
+  css = parseKeyframes(css)
+  css = parseMediaQuery(rawCss, classMetadataList, css, sourceNodes, isInject)
+  cssToMetadata('', css, sourceNodes, isInject, rawCss, classMetadataList)
   
   if (isInject) {
     importTailwind(ast) 
     const res = HTML.stringify(ast)
     await writeFile(`${ output }/index.html`, res)
   } else {
+    const expr = metadataToExpr(classMetadataList)
     await writeFile(`${ output }/index.css`, expr)
   }
 

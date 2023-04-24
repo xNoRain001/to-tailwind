@@ -1,6 +1,8 @@
-const regexp = /@media\((.*?):(.*?)\){(?:(?!}}).)*}}/gis
+const cssToMetadata = require("../css-to-metadata")
 
-const parseMediaQuery = css => {
+const regexp = /@media\((.*?):(.*?)\){((?:(?!}}).)+)/g
+
+const parseMediaQuery = (rawCss, classMetadataList, css, sourceNode, isInject) => {
   const breakPoints = {
     'min-width': [],
     'max-width': [],
@@ -9,7 +11,10 @@ const parseMediaQuery = css => {
   }
 
   css = css.replace(regexp, (_, p, v, cssText) => {
-    breakPoints[p].push(parseInt(v))
+    breakPoints[p].push(({ 
+      size: parseInt(v),
+      cssText: `${ cssText }}` 
+    }))
 
     return ''
   })
@@ -20,10 +25,17 @@ const parseMediaQuery = css => {
     const prop = props[i]
 
     if (prop.startsWith('max')) {
-      breakPoints[prop].sort((a, b) => b - a)
+      breakPoints[prop].sort((a, b) => b.size - a.size)
     } else {
-      breakPoints[prop].sort((a, b) => a - b)
+      breakPoints[prop].sort((a, b) => a.size - b.size)
     }
+  }
+
+  const maxWidthList = breakPoints['max-width']
+
+  for (let i = 0, l = maxWidthList.length; i < l; i++) {
+    const { size, cssText } = maxWidthList[i]
+    cssToMetadata(`${ size }:`, cssText, sourceNode, isInject, rawCss, classMetadataList)
   }
 
   return css

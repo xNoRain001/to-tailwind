@@ -1,7 +1,7 @@
 {
   "name": "to-tailwind",
-  "version": "0.3.3",
-  "description": "Style or class convert to tailwind.",
+  "version": "0.4.0",
+  "description": "Class convert to tailwind.",
   "keywords": [
     "to-tailwind",
     "tailwind",

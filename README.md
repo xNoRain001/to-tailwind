@@ -1,6 +1,6 @@
 ## Overview
 
-Style or class convert to Tailwind expression, then you can use Tailwind to 
+Class convert to Tailwind expression, then you can use Tailwind to 
 develop and no longer need the style files you wrote earlier.
 
 ## Installation
@@ -51,24 +51,9 @@ Output file
 }
 ```
 
-Or inject tailwind expressions to HTML, original class name will be retained 
-because javascript code may be use these class name.
+## Demo
 
-Run
-
-```
-to-tailwind --html ./test/index.html --css ./test/index.css --output ./target --inject true
-```
-
-```html
-<!-- ./target/index.html -->
-<body>
-  <ul>
-    <li class="text-[red] list-item">foo</li>
-    <li class="last:text-[green] list-item">bar</li>
-  </ul>
-</body>
-```
+Click <a href="http://120.77.148.28">here</a>.
 
 ## License
 
